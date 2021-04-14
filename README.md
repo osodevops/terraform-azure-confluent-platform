@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/andrew0459/oso-confluent/_apis/build/status/mccullya.python-sample-vscode-flask-tutorial?branchName=master)](https://dev.azure.com/andrew0459/oso-confluent/_build/latest?definitionId=1&branchName=master)
+
 [<img src="https://osodevops.io/assets/images/logo-purple-b3af53cc.svg" width="250"/>](https://osodevops.io)
 
 # aws-terraform-module-tableau
