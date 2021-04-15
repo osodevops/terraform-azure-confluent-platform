@@ -26,15 +26,16 @@ resource "azuredevops_project" "project" {
   }
 }
 
-resource "azuredevops_variable_group" "vars" {
+
+resource "azuredevops_variable_group" "ansible-vars" {
   project_id   = azuredevops_project.project.id
-  name         = "Infrastructure Pipeline Variables"
-  description  = "Managed by Terraform"
+  name         = "oso_confluent_vars"
   allow_access = true
 
   variable {
-    name  = "FOO"
-    value = "BAR"
+    name  = "ANSIBLE_SSH_PUB"
+    value = file("${path.module}/oso-confluent-ssh.pub")
+    is_secret = false
   }
 }
 
@@ -42,8 +43,7 @@ resource "azuredevops_serviceendpoint_github" "github" {
   project_id            = azuredevops_project.project.id
   service_endpoint_name = "Sample GithHub Personal Access Token"
   auth_personal {
-    # Also can be set with AZDO_GITHUB_SERVICE_CONNECTION_PAT environment variable
-    personal_access_token = var.pat-token
+    # set with AZDO_GITHUB_SERVICE_CONNECTION_PAT environment variable
   }
 }
 
@@ -66,14 +66,14 @@ resource "azuredevops_build_definition" "github-azure-devops" {
   }
 
   variable_groups = [
-    azuredevops_variable_group.vars.id
+    azuredevops_variable_group.ansible-vars.id
   ]
 }
 
 // This will be used for the cp-ansible provisioning
 resource "azuredevops_build_definition" "github-terraform" {
   project_id = azuredevops_project.project.id
-  name       = "Confluent Terraform Provisioning"
+  name       = "Terraform Provisioning"
   path       = "\\Confluent"
 
   ci_trigger {
@@ -89,14 +89,14 @@ resource "azuredevops_build_definition" "github-terraform" {
   }
 
   variable_groups = [
-    azuredevops_variable_group.vars.id
+    azuredevops_variable_group.ansible-vars.id
   ]
 }
 
 // This will be used for the cp-ansible provisioning
 resource "azuredevops_build_definition" "github-ansible" {
   project_id = azuredevops_project.project.id
-  name       = "Confluent Ansible Provisioning"
+  name       = "Ansible Provisioning"
   path       = "\\Confluent"
 
   ci_trigger {
@@ -112,6 +112,6 @@ resource "azuredevops_build_definition" "github-ansible" {
   }
 
   variable_groups = [
-    azuredevops_variable_group.vars.id
+    azuredevops_variable_group.ansible-vars.id
   ]
 }

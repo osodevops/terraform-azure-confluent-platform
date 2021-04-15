@@ -2,13 +2,24 @@ trigger:
 - master
 - develop
 
+variables:
+- group: oso_confluent_vars
 pool: Default
 #container: devopsinfra/docker-terragrunt
 
 stages:
+- stage: secrets
+  displayName: 'AzureDevOps'
+  jobs:
+    - job: terraform_plan_azure_devops
+      steps:
+        - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
+            cat ./modules/confluent_node/oso-confluent-ssh.pub
+          displayName: 'secrets'
 - stage: ResourceGroup
   displayName: 'Resource Group'
-  dependsOn: build
+  dependsOn: secrets
   jobs:
     - job: terraform_plan_resource_group
       steps:
@@ -38,11 +49,12 @@ stages:
           displayName: 'terraform apply'
 - stage: Broker
   displayName: 'Broker'
-  dependsOn: build
+  dependsOn: secrets
   jobs:
     - job: terraform_plan_broker
       steps:
         - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
             cd production/broker
             terragrunt plan
           displayName: 'terraform plan'
@@ -63,16 +75,18 @@ stages:
       dependsOn: waitForValidation
       steps:
         - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
             cd production/broker
             terragrunt apply -auto-approve
           displayName: 'terraform apply'
 - stage: Zookeeper
   displayName: 'Zookeeper'
-  dependsOn: build
+  dependsOn: secrets
   jobs:
     - job: terraform_plan_zookeeper
       steps:
         - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
             cd production/zookeeper
             terragrunt plan
           displayName: 'terraform plan'
@@ -93,16 +107,18 @@ stages:
       dependsOn: waitForValidation
       steps:
         - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
             cd production/zookeeper
             terragrunt apply -auto-approve
           displayName: 'terraform apply'
 - stage: SchemaRegistry
   displayName: 'SchemaRegistry'
-  dependsOn: build
+  dependsOn: secrets
   jobs:
     - job: terraform_plan_schema_registry
       steps:
         - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
             cd production/schema-registry
             terragrunt plan
           displayName: 'terraform plan'
@@ -123,16 +139,18 @@ stages:
       dependsOn: waitForValidation
       steps:
         - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
             cd production/schema-registry
             terragrunt apply -auto-approve
           displayName: 'terraform apply'
 - stage: RestProxy
   displayName: 'RestProxy'
-  dependsOn: build
+  dependsOn: secrets
   jobs:
     - job: terraform_plan_rest_proxy
       steps:
         - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
             cd production/rest-proxy
             terragrunt plan
           displayName: 'terraform plan'
@@ -153,16 +171,18 @@ stages:
       dependsOn: waitForValidation
       steps:
         - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
             cd production/rest-proxy
             terragrunt apply -auto-approve
           displayName: 'terraform apply'
 - stage: KafkaConnect
   displayName: 'KafkaConnect'
-  dependsOn: build
+  dependsOn: secrets
   jobs:
     - job: terraform_plan_kafka_connect
       steps:
         - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
             cd production/kafka-connect
             terragrunt plan
           displayName: 'terraform plan'
@@ -183,16 +203,18 @@ stages:
       dependsOn: waitForValidation
       steps:
         - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
             cd production/kafka-connect
             terragrunt apply -auto-approve
           displayName: 'terraform apply'
 - stage: KSQL
   displayName: 'KSQL'
-  dependsOn: build
+  dependsOn: secrets
   jobs:
     - job: terraform_plan_ksql
       steps:
         - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
             cd production/ksql
             terragrunt plan
           displayName: 'terraform plan'
@@ -213,16 +235,18 @@ stages:
       dependsOn: waitForValidation
       steps:
         - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
             cd production/ksql
             terragrunt apply -auto-approve
           displayName: 'terraform apply'
 - stage: ControlCentre
   displayName: 'ControlCentre'
-  dependsOn: build
+  dependsOn: secrets
   jobs:
     - job: terraform_plan_control_centre
       steps:
         - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
             cd production/control-centre
             terragrunt plan
           displayName: 'terraform plan'
@@ -243,21 +267,23 @@ stages:
       dependsOn: waitForValidation
       steps:
         - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
             cd production/control-centre
             terragrunt apply -auto-approve
           displayName: 'terraform apply'
 - stage: CompletePlatform
   displayName: 'CompletePlatform'
-  dependsOn: build
+  dependsOn: secrets
   jobs:
     - job: terraform_plan_complete_platform
       steps:
         - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
             cd production
             terragrunt run-all plan
           displayName: 'terraform plan'
     - job: waitForValidation
-      dependsOn: terraform_plan
+      dependsOn: terraform_plan_complete_platform
       displayName: Wait for external validation
       pool: server
       timeoutInMinutes: 4320 # job times out in 3 days
@@ -273,6 +299,7 @@ stages:
       dependsOn: waitForValidation
       steps:
         - script: |
-            cd production/control-centre
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
+            cd production
             terragrunt run-all apply -auto-approve
           displayName: 'terraform apply'

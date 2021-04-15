@@ -1,30 +1,20 @@
-# Explicitly set none for repositry trigger
 trigger:
-  - none
+  - master
+  - develop
 
-resources:
-  pipelines:
-    - pipeline: confluent-terraform-deploy  # Name of the pipeline resource
-      source: Confluent Terraform Build # Name of the triggering pipeline
-      trigger:
-        branches:
-          - develop
-          - master
-          -
-pool: default
+variables:
+- group: ansible_vars
 
-steps:
-  - task: TerraformTaskV1@0
-    name: init
-    inputs:
-      provider: 'azurerm'
-      command: 'init'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/production/broker'
-      backendServiceArm: 's149D.bsvc.cip.azdo'
+pool: Default
+#container: devopsinfra/docker-terragrunt
 
-  - task: TerraformTaskV1@0
-    inputs:
-      provider: 'azurerm'
-      command: 'plan'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/broker'
-      environmentServiceNameAzureRM: 's149D.bsvc.cip.azdo'
+stages:
+  - stage: Ansible
+    displayName: 'AzureDevOps'
+    jobs:
+      - job: terraform_plan_azure_devops
+        steps:
+          - script: |
+              echo "$(ANSIBLE_SSH)" > ssh_tmp.txt
+              docker run -v ssh_tmp.txt:/root/.ssh/id_rsa osodevops/cp-ansible:second ansible-playbook all.yml -i /ansible/inventories/dev.yml
+            displayName: 'ansible'

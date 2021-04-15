@@ -1,0 +1,72 @@
+# 1 node Confluent Platform deployment
+# For all configuration variables see: roles/confluent.variables/defaults/main.yml
+all:
+  vars:
+    environment_id: dev
+    ansible_connection: ssh
+    ansible_ssh_user: osoadmin
+    ansible_user: osoadmin
+    ansible_become: true
+
+    health_checks_enabled: false
+    sasl_protocol: plain
+    ssl_enabled: false
+    ssl_mutual_auth_enabled: false
+    rbac_enabled: false
+
+    regenerate_ca: true
+    regenerate_keystore_and_truststore: true
+
+    mds_super_user: "mds-user"
+    mds_super_user_password: "mds-user"
+    schema_registry_ldap_user: "schema-reg-user"
+    schema_registry_ldap_password: "schema-reg-user"
+    kafka_connect_ldap_user: "kafka-connect-user"
+    kafka_connect_ldap_password: "kafka-connect-user"
+    ksql_ldap_user: "ksql-user"
+    ksql_ldap_password: "ksql-user"
+    kafka_rest_ldap_user: "kafka-rest-user"
+    kafka_rest_ldap_password: "kafka-rest-user"
+    control_center_ldap_user: "control-centre-user"
+    control_center_ldap_password: "control-centre-user"
+
+    zookeeper_sasl_protocol: none
+    zookeeper_ssl_enabled: false
+    zookeeper_ssl_mutual_auth_enabled: false
+
+    confluent_cli_download_enabled: false
+    jmxexporter_enabled: false
+    jolokia_enabled: false
+    confluent:
+      support:
+        metrics_enabled: false
+    zookeeper:
+      properties:
+        4lw.commands.whitelist: stat, ruok, conf, isro, cons, dump, crst, envi, srst, srvr, wchc, wchp, mntr
+
+# Node configuration
+kafka_broker:
+  vars:
+    kafka_broker_custom_properties:
+      ldap.java.naming.factory.initial: com.sun.jndi.ldap.LdapCtxFactory
+  hosts:
+    broker-1.confluent.internal:
+zookeeper:
+  hosts:
+    zookeeper-1.confluent.internal:
+schema_registry:
+  hosts:
+    schema-registry-1.confluent.internal:
+control_center:
+  hosts:
+    control-centre-1.confluent.internal:
+kafka_connect:
+  hosts:
+    kafka-connect-1.confluent.internal:
+kafka_rest:
+  hosts:
+    rest-proxy-1.confluent.internal:
+ksql:
+  hosts:
+    ksql-1.confluent.internal:
+
