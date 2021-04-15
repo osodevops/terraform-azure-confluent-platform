@@ -26,8 +26,7 @@ locals {
 
 inputs = {
   application = "${basename(get_terragrunt_dir())}"
-  admin_username = "andrew"
-  admin_password = "mccully123!!"
+  admin_username = "osoadmin"
   cluster_instance_count = 1
   environment = local.env
   prefix = local.prefix

@@ -1,15 +1,7 @@
 .idea
 .terragrunt-cache
 .terraform
-<<<<<<< HEAD
-<<<<<<< HEAD
 *.lock.hcl
 terraform.tfstate
-=======
-.terraform-state*
-*.lock.hcl
->>>>>>> 151d165... debugy
-=======
-*.lock.hcl
-terraform.tfstate
->>>>>>> a55bdd5... rrrrr
+oso-confluent-ssh
+oso-confluent-ssh.pub

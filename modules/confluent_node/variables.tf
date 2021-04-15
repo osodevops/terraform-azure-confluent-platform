@@ -2,10 +2,6 @@ variable admin_username {
   type        = string
   description = "admin username"
 }
-variable admin_password {
-  type        = string
-  description = "admin password"
-}
 variable azure_subnet_name {
   type        = string
   description = "Name of the Subnet to use for deploying VMs"

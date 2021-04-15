@@ -15,8 +15,12 @@ resource "azurerm_linux_virtual_machine" "cluster" {
   )
 
   admin_username = var.admin_username
-  admin_password = var.admin_password
-  disable_password_authentication = "false"
+
+  admin_ssh_key {
+    username   = var.admin_username
+    public_key = file("${path.module}/oso-confluent-ssh.pub")
+  }
+
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"

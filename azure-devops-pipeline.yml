@@ -1,0 +1,30 @@
+# Explicitly set none for repositry trigger
+trigger:
+  - none
+
+resources:
+  pipelines:
+    - pipeline: confluent-terraform-deploy  # Name of the pipeline resource
+      source: Confluent Terraform Build # Name of the triggering pipeline
+      trigger:
+        branches:
+          - develop
+          - master
+          -
+pool: default
+
+steps:
+  - task: TerraformTaskV1@0
+    name: init
+    inputs:
+      provider: 'azurerm'
+      command: 'init'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/production/broker'
+      backendServiceArm: 's149D.bsvc.cip.azdo'
+
+  - task: TerraformTaskV1@0
+    inputs:
+      provider: 'azurerm'
+      command: 'plan'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/broker'
+      environmentServiceNameAzureRM: 's149D.bsvc.cip.azdo'

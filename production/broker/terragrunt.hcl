@@ -27,8 +27,7 @@ locals {
 inputs = {
   application = "${basename(get_terragrunt_dir())}"
   user_data_template = "broker"
-  admin_username = "andrew"
-  admin_password = "mccully123!!"
+  admin_username = "osoadmin"
   cluster_instance_count = 1
   data_disk_size = 2048
   environment = local.env

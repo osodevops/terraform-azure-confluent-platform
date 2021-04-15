@@ -6,35 +6,18 @@ pool: Default
 #container: devopsinfra/docker-terragrunt
 
 stages:
-- stage: Build
-  displayName: 'Build Terraform artifact'
-  jobs:
-  - job: copy_artifacts
-    steps:
-      - task: CopyFiles@2
-        displayName: 'Copy application gateway module'
-        inputs:
-          SourceFolder: '.'
-          TargetFolder: '$(build.artifactstagingdirectory)'
-  - job: publish_artifacts
-    steps:
-      - task: CopyFiles@2
-        displayName: 'Copy application gateway module'
-        inputs:
-          SourceFolder: '.'
-          TargetFolder: '$(build.artifactstagingdirectory)'
 - stage: ResourceGroup
   displayName: 'Resource Group'
   dependsOn: build
   jobs:
-    - job: terraform_plan
+    - job: terraform_plan_resource_group
       steps:
         - script: |
-            cd production/resource_group
+            cd production/resource-group
             terragrunt plan
           displayName: 'terraform plan'
     - job: waitForValidation
-      dependsOn: terraform_plan
+      dependsOn: terraform_plan_resource_group
       displayName: Wait for external validation
       pool: server
       timeoutInMinutes: 4320 # job times out in 3 days
@@ -46,25 +29,25 @@ stages:
               mccullya@gmail.com
             instructions: 'Please validate the build configuration and resume'
             onTimeout: 'reject'
-    - job: terraform_apply
+    - job: terraform_apply_resource_group
       dependsOn: waitForValidation
       steps:
         - script: |
-            cd production/resource_group
+            cd production/resource-group
             terragrunt apply -auto-approve
           displayName: 'terraform apply'
 - stage: Broker
   displayName: 'Broker'
   dependsOn: build
   jobs:
-    - job: terraform_plan
+    - job: terraform_plan_broker
       steps:
         - script: |
             cd production/broker
             terragrunt plan
           displayName: 'terraform plan'
     - job: waitForValidation
-      dependsOn: terraform_plan
+      dependsOn: terraform_plan_broker
       displayName: Wait for external validation
       pool: server
       timeoutInMinutes: 4320 # job times out in 3 days
@@ -76,7 +59,7 @@ stages:
               mccullya@gmail.com
             instructions: 'Please validate the build configuration and resume'
             onTimeout: 'reject'
-    - job: terraform_apply
+    - job: terraform_apply_broker
       dependsOn: waitForValidation
       steps:
         - script: |
@@ -87,14 +70,14 @@ stages:
   displayName: 'Zookeeper'
   dependsOn: build
   jobs:
-    - job: terraform_plan
+    - job: terraform_plan_zookeeper
       steps:
         - script: |
             cd production/zookeeper
             terragrunt plan
           displayName: 'terraform plan'
     - job: waitForValidation
-      dependsOn: terraform_plan
+      dependsOn: terraform_plan_zookeeper
       displayName: Wait for external validation
       pool: server
       timeoutInMinutes: 4320 # job times out in 3 days
@@ -106,7 +89,7 @@ stages:
               mccullya@gmail.com
             instructions: 'Please validate the build configuration and resume'
             onTimeout: 'reject'
-    - job: terraform_apply
+    - job: terraform_apply_zookeeper
       dependsOn: waitForValidation
       steps:
         - script: |
@@ -117,14 +100,14 @@ stages:
   displayName: 'SchemaRegistry'
   dependsOn: build
   jobs:
-    - job: terraform_plan
+    - job: terraform_plan_schema_registry
       steps:
         - script: |
-            cd production/schema_registry
+            cd production/schema-registry
             terragrunt plan
           displayName: 'terraform plan'
     - job: waitForValidation
-      dependsOn: terraform_plan
+      dependsOn: terraform_plan_schema_registry
       displayName: Wait for external validation
       pool: server
       timeoutInMinutes: 4320 # job times out in 3 days
@@ -136,25 +119,25 @@ stages:
               mccullya@gmail.com
             instructions: 'Please validate the build configuration and resume'
             onTimeout: 'reject'
-    - job: terraform_apply
+    - job: terraform_apply_schema_registry
       dependsOn: waitForValidation
       steps:
         - script: |
-            cd production/schema_registry
+            cd production/schema-registry
             terragrunt apply -auto-approve
           displayName: 'terraform apply'
 - stage: RestProxy
   displayName: 'RestProxy'
   dependsOn: build
   jobs:
-    - job: terraform_plan
+    - job: terraform_plan_rest_proxy
       steps:
         - script: |
-            cd production/rest_proxy
+            cd production/rest-proxy
             terragrunt plan
           displayName: 'terraform plan'
     - job: waitForValidation
-      dependsOn: terraform_plan
+      dependsOn: terraform_plan_rest_proxy
       displayName: Wait for external validation
       pool: server
       timeoutInMinutes: 4320 # job times out in 3 days
@@ -166,25 +149,25 @@ stages:
               mccullya@gmail.com
             instructions: 'Please validate the build configuration and resume'
             onTimeout: 'reject'
-    - job: terraform_apply
+    - job: terraform_apply_rest_proxy
       dependsOn: waitForValidation
       steps:
         - script: |
-            cd production/rest_proxy
+            cd production/rest-proxy
             terragrunt apply -auto-approve
           displayName: 'terraform apply'
 - stage: KafkaConnect
   displayName: 'KafkaConnect'
   dependsOn: build
   jobs:
-    - job: terraform_plan
+    - job: terraform_plan_kafka_connect
       steps:
         - script: |
-            cd production/kafka_connect
+            cd production/kafka-connect
             terragrunt plan
           displayName: 'terraform plan'
     - job: waitForValidation
-      dependsOn: terraform_plan
+      dependsOn: terraform_plan_kafka_connect
       displayName: Wait for external validation
       pool: server
       timeoutInMinutes: 4320 # job times out in 3 days
@@ -196,25 +179,25 @@ stages:
               mccullya@gmail.com
             instructions: 'Please validate the build configuration and resume'
             onTimeout: 'reject'
-    - job: terraform_apply
+    - job: terraform_apply_kafka_connect
       dependsOn: waitForValidation
       steps:
         - script: |
-            cd production/kafka_connect
+            cd production/kafka-connect
             terragrunt apply -auto-approve
           displayName: 'terraform apply'
 - stage: KSQL
   displayName: 'KSQL'
   dependsOn: build
   jobs:
-    - job: terraform_plan
+    - job: terraform_plan_ksql
       steps:
         - script: |
             cd production/ksql
             terragrunt plan
           displayName: 'terraform plan'
     - job: waitForValidation
-      dependsOn: terraform_plan
+      dependsOn: terraform_plan_ksql
       displayName: Wait for external validation
       pool: server
       timeoutInMinutes: 4320 # job times out in 3 days
@@ -226,7 +209,7 @@ stages:
               mccullya@gmail.com
             instructions: 'Please validate the build configuration and resume'
             onTimeout: 'reject'
-    - job: terraform_apply
+    - job: terraform_apply_ksql
       dependsOn: waitForValidation
       steps:
         - script: |
@@ -237,14 +220,14 @@ stages:
   displayName: 'ControlCentre'
   dependsOn: build
   jobs:
-    - job: terraform_plan
+    - job: terraform_plan_control_centre
       steps:
         - script: |
-            cd production/control_centre
+            cd production/control-centre
             terragrunt plan
           displayName: 'terraform plan'
     - job: waitForValidation
-      dependsOn: terraform_plan
+      dependsOn: terraform_plan_control_centre
       displayName: Wait for external validation
       pool: server
       timeoutInMinutes: 4320 # job times out in 3 days
@@ -256,18 +239,18 @@ stages:
               mccullya@gmail.com
             instructions: 'Please validate the build configuration and resume'
             onTimeout: 'reject'
-    - job: terraform_apply
+    - job: terraform_apply_control_centre
       dependsOn: waitForValidation
       steps:
         - script: |
-            cd production/control_centre
+            cd production/control-centre
             terragrunt apply -auto-approve
           displayName: 'terraform apply'
 - stage: CompletePlatform
   displayName: 'CompletePlatform'
   dependsOn: build
   jobs:
-    - job: terraform_plan
+    - job: terraform_plan_complete_platform
       steps:
         - script: |
             cd production
@@ -286,10 +269,10 @@ stages:
               mccullya@gmail.com
             instructions: 'Please validate the build configuration and resume'
             onTimeout: 'reject'
-    - job: terraform_apply
+    - job: terraform_apply_complete_platform
       dependsOn: waitForValidation
       steps:
         - script: |
-            cd production/control_centre
+            cd production/control-centre
             terragrunt run-all apply -auto-approve
           displayName: 'terraform apply'
