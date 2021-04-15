@@ -22,3 +22,14 @@ RUN:
 ➜  confluent_node git:(develop-mccullya) ✗ ssh-keygen -t rsa
 Generating public/private rsa key pair.
 Enter file in which to save the key (/home/mccullya/.ssh/id_rsa): oso-confluent-ssh
+
+
+
+getting ansible running on broker...
+
+sudo yum install git rh-python36 -y
+scl enable rh-python36 bash
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python3 get-pip.py --user
+python3 -m pip install ansible
+pip install --upgrade pip

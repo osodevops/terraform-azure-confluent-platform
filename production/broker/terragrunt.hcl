@@ -22,6 +22,7 @@ locals {
   azure_virtual_network_name = "${local.environment_vars.locals.prefix}-${local.environment_vars.locals.environment}-network"
   internal_subnet_name = local.environment_vars.locals.internal_subnet_name
   common_tags = local.environment_vars.locals.common_tags
+  dns_zone = local.environment_vars.locals.dns_zone
 }
 
 inputs = {
@@ -32,6 +33,7 @@ inputs = {
   data_disk_size = 2048
   environment = local.env
   prefix = local.prefix
+  dns_zone = local.dns_zone
   azure_location = local.azure_location
   azure_resource_group_name = local.azure_resource_group_name
   azure_virtual_network_name = local.azure_virtual_network_name

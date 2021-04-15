@@ -3,6 +3,7 @@ locals {
   environment = "${basename(get_terragrunt_dir())}"
   internal_subnet_name = "internal"
   azure_location = "UK South"
+  dns_zone = "confluent.internal"
   common_tags = {
     "Application" = "confluent"
     "Environment" = "production"
