@@ -33,6 +33,11 @@ resource "azurerm_linux_virtual_machine" "cluster" {
     version   = "latest"
   }
 
+  lifecycle {
+    ignore_changes = [
+      admin_ssh_key["public_key"]
+    ]
+  }
   tags = merge({
     "ClusterBuilder:Name"      = "${local.uid}-${count.index}"
     "ClusterBuilder:NodeIndex" = count.index % var.cluster_instance_count
