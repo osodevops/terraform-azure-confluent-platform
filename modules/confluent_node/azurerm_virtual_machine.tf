@@ -35,7 +35,7 @@ resource "azurerm_linux_virtual_machine" "cluster" {
 
   lifecycle {
     ignore_changes = [
-      admin_ssh_key["public_key"]
+      admin_ssh_key
     ]
   }
   tags = merge({

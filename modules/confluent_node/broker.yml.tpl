@@ -13,3 +13,4 @@ mkdir -p /var/lib/kafka/data
 mount /dev/sdc /var/lib/kafka/data
 fi
 echo /dev/sdc /var/lib/kafka/data ext4 defaults,nofail 0 2 >> /etc/fstab
+rm -R /var/lib/kafka/data/lost+found
