@@ -1,0 +1,20 @@
+trigger:
+  - master
+  - develop
+
+variables:
+- group: ansible_vars
+
+pool: Default
+#container: devopsinfra/docker-terragrunt
+
+stages:
+  - stage: Ansible
+    displayName: 'AzureDevOps'
+    jobs:
+      - job: terraform_plan_azure_devops
+        steps:
+          - script: |
+              echo "$(ANSIBLE_SSH)" > ssh_tmp.txt
+              docker run -v ssh_tmp.txt:/root/.ssh/id_rsa osodevops/cp-ansible:second ansible-playbook all.yml -i /ansible/inventories/dev.yml
+            displayName: 'ansible'

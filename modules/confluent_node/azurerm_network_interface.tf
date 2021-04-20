@@ -12,3 +12,16 @@ resource azurerm_network_interface cluster_interface {
   }
   tags = var.common_tags
 }
+
+
+resource "azurerm_private_dns_a_record" "node" {
+  count = var.cluster_instance_count
+  name                = "${var.application}-${count.index + 1}"
+  resource_group_name = var.azure_resource_group_name
+  zone_name           = var.dns_zone
+  ttl                 = 300
+  records             = [
+    azurerm_linux_virtual_machine.cluster[count.index].private_ip_address
+  ]
+  depends_on = [azurerm_linux_virtual_machine.cluster]
+}

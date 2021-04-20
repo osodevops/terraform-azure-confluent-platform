@@ -2,10 +2,6 @@ variable admin_username {
   type        = string
   description = "admin username"
 }
-variable admin_password {
-  type        = string
-  description = "admin password"
-}
 variable azure_subnet_name {
   type        = string
   description = "Name of the Subnet to use for deploying VMs"
@@ -40,6 +36,9 @@ variable cluster_instance_type {
   type        = string
   description = "VM size"
   default     = "Standard_D8as_v4"
+}
+variable "dns_zone" {
+  description = "The DNS zone the VMs A record will be associated to"
 }
 variable "root_disk_size" {
   type    = number

@@ -1,5 +1,5 @@
 terraform {
-  source = "../..//modules/resource_group"
+  source = "../..//modules/resource-group"
 }
 
 include {

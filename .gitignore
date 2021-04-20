@@ -2,3 +2,6 @@
 .terragrunt-cache
 .terraform
 *.lock.hcl
+terraform.tfstate
+oso-confluent-ssh
+oso-confluent-ssh.pub

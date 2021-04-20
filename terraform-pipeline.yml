@@ -1,0 +1,305 @@
+trigger:
+- master
+- develop
+
+variables:
+- group: oso_confluent_vars
+pool: Default
+#container: devopsinfra/docker-terragrunt
+
+stages:
+- stage: secrets
+  displayName: 'AzureDevOps'
+  jobs:
+    - job: terraform_plan_azure_devops
+      steps:
+        - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
+            cat ./modules/confluent_node/oso-confluent-ssh.pub
+          displayName: 'secrets'
+- stage: ResourceGroup
+  displayName: 'Resource Group'
+  dependsOn: secrets
+  jobs:
+    - job: terraform_plan_resource_group
+      steps:
+        - script: |
+            cd production/resource-group
+            terragrunt plan
+          displayName: 'terraform plan'
+    - job: waitForValidation
+      dependsOn: terraform_plan_resource_group
+      displayName: Wait for external validation
+      pool: server
+      timeoutInMinutes: 4320 # job times out in 3 days
+      steps:
+        - task: ManualValidation@0
+          timeoutInMinutes: 1440 # task times out in 1 day
+          inputs:
+            notifyUsers: |
+              mccullya@gmail.com
+            instructions: 'Please validate the build configuration and resume'
+            onTimeout: 'reject'
+    - job: terraform_apply_resource_group
+      dependsOn: waitForValidation
+      steps:
+        - script: |
+            cd production/resource-group
+            terragrunt apply -auto-approve
+          displayName: 'terraform apply'
+- stage: Broker
+  displayName: 'Broker'
+  dependsOn: secrets
+  jobs:
+    - job: terraform_plan_broker
+      steps:
+        - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
+            cd production/broker
+            terragrunt plan
+          displayName: 'terraform plan'
+    - job: waitForValidation
+      dependsOn: terraform_plan_broker
+      displayName: Wait for external validation
+      pool: server
+      timeoutInMinutes: 4320 # job times out in 3 days
+      steps:
+        - task: ManualValidation@0
+          timeoutInMinutes: 1440 # task times out in 1 day
+          inputs:
+            notifyUsers: |
+              mccullya@gmail.com
+            instructions: 'Please validate the build configuration and resume'
+            onTimeout: 'reject'
+    - job: terraform_apply_broker
+      dependsOn: waitForValidation
+      steps:
+        - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
+            cd production/broker
+            terragrunt apply -auto-approve
+          displayName: 'terraform apply'
+- stage: Zookeeper
+  displayName: 'Zookeeper'
+  dependsOn: secrets
+  jobs:
+    - job: terraform_plan_zookeeper
+      steps:
+        - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
+            cd production/zookeeper
+            terragrunt plan
+          displayName: 'terraform plan'
+    - job: waitForValidation
+      dependsOn: terraform_plan_zookeeper
+      displayName: Wait for external validation
+      pool: server
+      timeoutInMinutes: 4320 # job times out in 3 days
+      steps:
+        - task: ManualValidation@0
+          timeoutInMinutes: 1440 # task times out in 1 day
+          inputs:
+            notifyUsers: |
+              mccullya@gmail.com
+            instructions: 'Please validate the build configuration and resume'
+            onTimeout: 'reject'
+    - job: terraform_apply_zookeeper
+      dependsOn: waitForValidation
+      steps:
+        - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
+            cd production/zookeeper
+            terragrunt apply -auto-approve
+          displayName: 'terraform apply'
+- stage: SchemaRegistry
+  displayName: 'SchemaRegistry'
+  dependsOn: secrets
+  jobs:
+    - job: terraform_plan_schema_registry
+      steps:
+        - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
+            cd production/schema-registry
+            terragrunt plan
+          displayName: 'terraform plan'
+    - job: waitForValidation
+      dependsOn: terraform_plan_schema_registry
+      displayName: Wait for external validation
+      pool: server
+      timeoutInMinutes: 4320 # job times out in 3 days
+      steps:
+        - task: ManualValidation@0
+          timeoutInMinutes: 1440 # task times out in 1 day
+          inputs:
+            notifyUsers: |
+              mccullya@gmail.com
+            instructions: 'Please validate the build configuration and resume'
+            onTimeout: 'reject'
+    - job: terraform_apply_schema_registry
+      dependsOn: waitForValidation
+      steps:
+        - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
+            cd production/schema-registry
+            terragrunt apply -auto-approve
+          displayName: 'terraform apply'
+- stage: RestProxy
+  displayName: 'RestProxy'
+  dependsOn: secrets
+  jobs:
+    - job: terraform_plan_rest_proxy
+      steps:
+        - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
+            cd production/rest-proxy
+            terragrunt plan
+          displayName: 'terraform plan'
+    - job: waitForValidation
+      dependsOn: terraform_plan_rest_proxy
+      displayName: Wait for external validation
+      pool: server
+      timeoutInMinutes: 4320 # job times out in 3 days
+      steps:
+        - task: ManualValidation@0
+          timeoutInMinutes: 1440 # task times out in 1 day
+          inputs:
+            notifyUsers: |
+              mccullya@gmail.com
+            instructions: 'Please validate the build configuration and resume'
+            onTimeout: 'reject'
+    - job: terraform_apply_rest_proxy
+      dependsOn: waitForValidation
+      steps:
+        - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
+            cd production/rest-proxy
+            terragrunt apply -auto-approve
+          displayName: 'terraform apply'
+- stage: KafkaConnect
+  displayName: 'KafkaConnect'
+  dependsOn: secrets
+  jobs:
+    - job: terraform_plan_kafka_connect
+      steps:
+        - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
+            cd production/kafka-connect
+            terragrunt plan
+          displayName: 'terraform plan'
+    - job: waitForValidation
+      dependsOn: terraform_plan_kafka_connect
+      displayName: Wait for external validation
+      pool: server
+      timeoutInMinutes: 4320 # job times out in 3 days
+      steps:
+        - task: ManualValidation@0
+          timeoutInMinutes: 1440 # task times out in 1 day
+          inputs:
+            notifyUsers: |
+              mccullya@gmail.com
+            instructions: 'Please validate the build configuration and resume'
+            onTimeout: 'reject'
+    - job: terraform_apply_kafka_connect
+      dependsOn: waitForValidation
+      steps:
+        - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
+            cd production/kafka-connect
+            terragrunt apply -auto-approve
+          displayName: 'terraform apply'
+- stage: KSQL
+  displayName: 'KSQL'
+  dependsOn: secrets
+  jobs:
+    - job: terraform_plan_ksql
+      steps:
+        - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
+            cd production/ksql
+            terragrunt plan
+          displayName: 'terraform plan'
+    - job: waitForValidation
+      dependsOn: terraform_plan_ksql
+      displayName: Wait for external validation
+      pool: server
+      timeoutInMinutes: 4320 # job times out in 3 days
+      steps:
+        - task: ManualValidation@0
+          timeoutInMinutes: 1440 # task times out in 1 day
+          inputs:
+            notifyUsers: |
+              mccullya@gmail.com
+            instructions: 'Please validate the build configuration and resume'
+            onTimeout: 'reject'
+    - job: terraform_apply_ksql
+      dependsOn: waitForValidation
+      steps:
+        - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
+            cd production/ksql
+            terragrunt apply -auto-approve
+          displayName: 'terraform apply'
+- stage: ControlCentre
+  displayName: 'ControlCentre'
+  dependsOn: secrets
+  jobs:
+    - job: terraform_plan_control_centre
+      steps:
+        - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
+            cd production/control-centre
+            terragrunt plan
+          displayName: 'terraform plan'
+    - job: waitForValidation
+      dependsOn: terraform_plan_control_centre
+      displayName: Wait for external validation
+      pool: server
+      timeoutInMinutes: 4320 # job times out in 3 days
+      steps:
+        - task: ManualValidation@0
+          timeoutInMinutes: 1440 # task times out in 1 day
+          inputs:
+            notifyUsers: |
+              mccullya@gmail.com
+            instructions: 'Please validate the build configuration and resume'
+            onTimeout: 'reject'
+    - job: terraform_apply_control_centre
+      dependsOn: waitForValidation
+      steps:
+        - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
+            cd production/control-centre
+            terragrunt apply -auto-approve
+          displayName: 'terraform apply'
+- stage: CompletePlatform
+  displayName: 'CompletePlatform'
+  dependsOn: secrets
+  jobs:
+    - job: terraform_plan_complete_platform
+      steps:
+        - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
+            cd production
+            terragrunt run-all plan
+          displayName: 'terraform plan'
+    - job: waitForValidation
+      dependsOn: terraform_plan_complete_platform
+      displayName: Wait for external validation
+      pool: server
+      timeoutInMinutes: 4320 # job times out in 3 days
+      steps:
+        - task: ManualValidation@0
+          timeoutInMinutes: 1440 # task times out in 1 day
+          inputs:
+            notifyUsers: |
+              mccullya@gmail.com
+            instructions: 'Please validate the build configuration and resume'
+            onTimeout: 'reject'
+    - job: terraform_apply_complete_platform
+      dependsOn: waitForValidation
+      steps:
+        - script: |
+            echo "$(ANSIBLE_SSH_PUB)" > ./modules/confluent_node/oso-confluent-ssh.pub
+            cd production
+            terragrunt run-all apply -auto-approve
+          displayName: 'terraform apply'
