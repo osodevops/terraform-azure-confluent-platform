@@ -30,39 +30,6 @@ resource "azurerm_network_profile" "cp-ansible" {
   }
 }
 
-resource "azurerm_container_group" "ansible-debug" {
-  name                = "oso-devops-cp-ansible--debug"
-  location            = azurerm_resource_group.confluent.location
-  resource_group_name = azurerm_resource_group.confluent.name
-  ip_address_type     = "Private"
-  network_profile_id  = azurerm_network_profile.cp-ansible.id
-  os_type             = "Linux"
-  restart_policy      = "Never"
-
-  container {
-    name   = "cp-ansible"
-    image  = "osodevops/cp-ansible:6.1.1-post--debug"
-    cpu    = "0.5"
-    memory = "1.5"
-
-    ports {
-      port     = 443
-      protocol = "TCP"
-    }
-
-    volume {
-      name       = "ssh"
-      mount_path = "/root/staging"
-      read_only  = false
-      share_name = azurerm_storage_share.ssh.name
-      storage_account_name = azurerm_storage_account.cp-ansible.name
-      storage_account_key  = azurerm_storage_account.cp-ansible.primary_access_key
-    }
-  }
-}
-
-
-
 resource "azurerm_container_group" "ansible" {
   name                = "oso-devops-cp-ansible"
   location            = azurerm_resource_group.confluent.location
@@ -74,9 +41,11 @@ resource "azurerm_container_group" "ansible" {
 
   container {
     name   = "cp-ansible"
-    image  = "osodevops/cp-ansible:6.1.1-post"
+    image  = "osodevops/cp-ansible:${var.cp-ansible-version}"
     cpu    = "0.5"
     memory = "1.5"
+    // Uncomment this to exec onto container for debug purposes
+    // commands = "sleep 100000"
 
     ports {
       port     = 443
@@ -119,6 +88,12 @@ resource "azurerm_storage_share" "ssh" {
       permissions = "r"
     }
   }
+}
+
+resource "azurerm_storage_share_file" "ansible-inventory" {
+  name             = "ansible-inventory.yml"
+  storage_share_id = azurerm_storage_share.ssh.id
+  source           = "${path.module}/ansible-inventory.yml"
 }
 
 resource "azurerm_storage_share_file" "ssh-priv-key" {

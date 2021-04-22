@@ -25,6 +25,6 @@ resource "azurerm_subnet_nat_gateway_association" "containers" {
 }
 
 resource "azurerm_subnet_nat_gateway_association" "internal" {
-  subnet_id      = azurerm_subnet.confluent.id
+  subnet_id      = azurerm_subnet.private.id
   nat_gateway_id = azurerm_nat_gateway.nat.id
 }

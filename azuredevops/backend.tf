@@ -3,7 +3,7 @@ terraform {
   backend "azurerm" {
     container_name       = "tfstate"
     key                  = "azuredevops/terraform.tfstate"
-    resource_group_name  = "oso-confluent"
-    storage_account_name = "osoconfluent"
+    resource_group_name  = "terraform-state"
+    storage_account_name = "confluentstate"
   }
 }
