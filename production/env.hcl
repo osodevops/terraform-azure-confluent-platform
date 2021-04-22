@@ -1,7 +1,8 @@
 locals {
   prefix = "oso"
   environment = "${basename(get_terragrunt_dir())}"
-  internal_subnet_name = "internal"
+  private_subnet_name = "confluent-private"
+  public_subnet_name = "confluent-public"
   azure_location = "UK South"
   dns_zone = "confluent.internal"
   common_tags = {

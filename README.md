@@ -13,9 +13,6 @@ OSO DevOps has developed the Confluent Deployment Library for Azure....
 * Terraform, please see [here](https://www.terraform.io/)
 * CP-Ansible, please see [here](https://github.com/confluentinc/cp-ansible)
 
-## Usage
-
-
 
 ### Additional Environments
 By using terragrunt's DRY approach, creating additional environments is very straight forward.  Simply copy the entire `production` folder to a new folder (i.e named `staging`), and you will be able to deploy in the same manner as production (The deployments are folder name aware).
@@ -25,22 +22,56 @@ By using terragrunt's DRY approach, creating additional environments is very str
 * Number of environments
 * Size of broker storage 
 * Build Agents
-* Whitelist of IPs?
 
 ### Pre-Deployment Tasks
-##### Generate SSH keys for virtual machines.
-* Storage account for State?? //TODO
-* az login << //TODO
+##### Generate SSH keys for virtual machines
 * From the root of the project, run `./ssh-generation.sh` this will populate keys through the code base which will be used for remote access onto the Confluent servers
+
+##### Create storage account for Terraform state
+* Sign in with [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/authenticate-azure-cli) (`az login`) 
+* Execute `./generate_state.sh` to create a standalone resource group and storage account to be used for terraform state
+
+### Terraform Deployment
+#### Local Deployment
+With the terragrunt framework, we have the ability to deploy a single module (for example, navigating into ./production/zookeerp), and running `terragrunt plan`.
+Alternatively, we could navigate to the root of the environment (i.e. /production), and run `terragrunt run-all plan` to have a plan run against each module
+
+```
+➜  production git:(develop) ✗ terragrunt run-all apply
+INFO[0000] Stack at /home/azure-terraform-module-confluent/production:
+=> Module /home/azure-terraform-module-confluent/production/broker (excluded: false, dependencies: [/home/azure-terraform-module-confluent/production/resource_group])
+=> Module /home/azure-terraform-module-confluent/production/control_centre (excluded: false, dependencies: [/home/azure-terraform-module-confluent/production/resource_group])
+=> Module /home/azure-terraform-module-confluent/production/kafka_connect (excluded: false, dependencies: [/home/azure-terraform-module-confluent/production/resource_group])
+=> Module /home/azure-terraform-module-confluent/production/ksql (excluded: false, dependencies: [/home/azure-terraform-module-confluent/production/resource_group])
+=> Module /home/azure-terraform-module-confluent/production/resource_group (excluded: false, dependencies: [])
+=> Module /home/azure-terraform-module-confluent/production/rest_proxy (excluded: false, dependencies: [/home/azure-terraform-module-confluent/production/resource_group])
+=> Module /home/azure-terraform-module-confluent/production/schema_registry (excluded: false, dependencies: [/home/azure-terraform-module-confluent/production/resource_group])
+=> Module /home/azure-terraform-module-confluent/production/zookeeper (excluded: false, dependencies: [/home/azure-terraform-module-confluent/production/resource_group])
+Are you sure you want to run 'terragrunt apply' in each folder of the stack described above? (y/n)
+```
+
+### Ansible Deployment
+The terraform deployment deploys a Azure container group into a private subnet which has the ability to provision the newly created VMs with Terraform.  To run this container, find the container group named **oso-devops-cp-ansible** in the Azure, CLI, and click the 'Start'
+
+![container](docs/images/azure_container.png)
+
+
+#### Deploying Azure DevOps (pipelines)
+
+##### Azure DevOps Predeployment Tasks
 * [Generate an Azure Devops PAT](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page); set an Environment variable named `AZDO_PERSONAL_ACCESS_TOKEN ` to this value.
 * For GitHub projects, you will need to [generate a PAT](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token); this will be used during the 'AzureDevOps' deployment.  Set this value to `AZDO_GITHUB_SERVICE_CONNECTION_PAT`
 * Set an environment varialble `AZDO_ORG_SERVICE_URL` to the value of your Azure DevOps organisation URL (i.e. https://dev.azure.com/osodevops)
 
-#### Deploying Azure DevOps (pipelines)
+##### Deployment Steps  
 * Navigate to `/azuredevops` 
 * Run `Terragrunt Apply`, this will link up to your github project and read in the base pipelines
 
-#### Deploying Virtual Machine Infrastructure (pipelines)
+
+##### Configuring a build agent
+* In order to run the pipelines, a build agent is required.  
+
+
 ##### Deploying from pipeline
 * From within Azure DevOps, navigate to the 'Confluent Terraform Provisioning' pipeline job, and run the pipeline.
 The Confluent platform infrastructure is made up of the following resources
@@ -70,23 +101,9 @@ To deploy the entire platform, review the automated 'terragrunt plan' stage of t
 
 ![validation](docs/images/validation.png)
 
-##### Deploying Locally 
-With the terragrunt framework, we have the ability to deploy a single module (for example, navigating into ./production/zookeerp), and running `terragrunt plan`.
-Alternatively, we could navigate to the root of the environment (i.e. /production), and run `terragrunt run-all plan` to have a plan run against each module
 
-```
-➜  production git:(develop) ✗ terragrunt run-all apply
-INFO[0000] Stack at /home/azure-terraform-module-confluent/production:
-=> Module /home/azure-terraform-module-confluent/production/broker (excluded: false, dependencies: [/home/azure-terraform-module-confluent/production/resource_group])
-=> Module /home/azure-terraform-module-confluent/production/control_centre (excluded: false, dependencies: [/home/azure-terraform-module-confluent/production/resource_group])
-=> Module /home/azure-terraform-module-confluent/production/kafka_connect (excluded: false, dependencies: [/home/azure-terraform-module-confluent/production/resource_group])
-=> Module /home/azure-terraform-module-confluent/production/ksql (excluded: false, dependencies: [/home/azure-terraform-module-confluent/production/resource_group])
-=> Module /home/azure-terraform-module-confluent/production/resource_group (excluded: false, dependencies: [])
-=> Module /home/azure-terraform-module-confluent/production/rest_proxy (excluded: false, dependencies: [/home/azure-terraform-module-confluent/production/resource_group])
-=> Module /home/azure-terraform-module-confluent/production/schema_registry (excluded: false, dependencies: [/home/azure-terraform-module-confluent/production/resource_group])
-=> Module /home/azure-terraform-module-confluent/production/zookeeper (excluded: false, dependencies: [/home/azure-terraform-module-confluent/production/resource_group])
-Are you sure you want to run 'terragrunt apply' in each folder of the stack described above? (y/n)
-```
+
+### Ansible Deployment
 
 TODO:
 Things to mention:
