@@ -1,6 +1,6 @@
 
 terraform {
-  source = "../..//modules/confluent_node"
+  source = "../..//modules/confluent_node_public"
 }
 
 include {

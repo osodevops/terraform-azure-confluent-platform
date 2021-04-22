@@ -9,6 +9,7 @@ resource azurerm_network_interface cluster_interface {
     name                          = "${local.uid}-ip-config"
     subnet_id                     = data.azurerm_subnet.subnet.id
     private_ip_address_allocation = "Dynamic"
+    public_ip_address_id = azurerm_public_ip.node-ip.id
   }
   tags = var.common_tags
 }
@@ -24,6 +25,14 @@ resource "azurerm_private_dns_a_record" "node" {
     azurerm_linux_virtual_machine.cluster[count.index].private_ip_address
   ]
   depends_on = [azurerm_linux_virtual_machine.cluster]
+}
+
+resource "azurerm_public_ip" "node-ip" {
+  name                = local.uid
+  location            = data.azurerm_resource_group.resource_group.location
+  resource_group_name = data.azurerm_resource_group.resource_group.name
+  allocation_method   = "Static"
+  sku                 = "Standard"
 }
 
 data "azurerm_network_security_group" "node" {
