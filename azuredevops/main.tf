@@ -47,29 +47,6 @@ resource "azuredevops_serviceendpoint_github" "github" {
   }
 }
 
-// Self referencing pipeline for changes to the Azure Devops Project
-resource "azuredevops_build_definition" "github-azure-devops" {
-  project_id = azuredevops_project.project.id
-  name       = "Azure Devops Provisioning"
-  path       = "\\Confluent"
-
-  ci_trigger {
-    use_yaml = true
-  }
-
-  repository {
-    repo_type   = "GitHub"
-    repo_id     = "osodevops/azure-terraform-module-confluent"
-    service_connection_id = azuredevops_serviceendpoint_github.github.id
-    branch_name = "main"
-    yml_path    = "azure-devops-pipeline.yml"
-  }
-
-  variable_groups = [
-    azuredevops_variable_group.ansible-vars.id
-  ]
-}
-
 // This will be used for the cp-ansible provisioning
 resource "azuredevops_build_definition" "github-terraform" {
   project_id = azuredevops_project.project.id
