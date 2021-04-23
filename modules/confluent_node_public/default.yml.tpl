@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-echo "Nothing to do"
+systemctl stop firewalld
+systemctl disable firewalld

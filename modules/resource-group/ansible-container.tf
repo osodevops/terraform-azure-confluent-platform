@@ -45,7 +45,7 @@ resource "azurerm_container_group" "ansible" {
     cpu    = "0.5"
     memory = "1.5"
     // Uncomment this to exec onto container for debug purposes
-    // commands = "sleep 100000"
+    // commands = ["sleep", "100000"]
 
     ports {
       port     = 443
