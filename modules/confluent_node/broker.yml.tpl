@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+systemctl stop firewalld
+systemctl disable firewalld
 echo "Sleeping for 1 min to allow volume to become attached....."
 sleep 1m
 export VOLUME_STAT="`file -s /dev/sdc`"
