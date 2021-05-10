@@ -7,8 +7,8 @@ include {
   path = find_in_parent_folders()
 }
 
-dependency "resource-group" {
-  config_path = "../resource-group"
+dependency "resource_group" {
+  config_path = "../resource_group"
   skip_outputs = "true"
 }
 

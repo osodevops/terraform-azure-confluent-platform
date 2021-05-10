@@ -15,7 +15,7 @@ So long as the above requirements are met (and you have successfully authorised 
 ### Pre-Deployment Tasks
 ##### Generate SSH keys for virtual machines
 * From the root of the project, run `./ssh-generation.sh` this will populate keys through the code base which will be used for remote access onto the Confluent servers
-* Keep hold of the newly created ./modules/resource-group/oso-confluent.ssh key, this is the key you will use to SSH onto the VMs.
+* Keep hold of the newly created ./modules/resource_group/oso-confluent.ssh key, this is the key you will use to SSH onto the VMs.
 
 ##### Create storage account for Terraform state
 * Sign in with [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/authenticate-azure-cli) (`az login`) 
@@ -96,13 +96,13 @@ To deploy the entire platform, review the automated 'terragrunt plan' stage of t
 
 ### Considerations
 ##### Cluster customisations
-All properties/configurations/hostnames for the cluster are stored in the file `./modules/resource-group/ansible-inventory.yml`.  To activate changes made to that file, perform the following operations:
-* Change `./modules/resource-group/ansible-inventory.yml` as desired
+All properties/configurations/hostnames for the cluster are stored in the file `./modules/resource_group/ansible-inventory.yml`.  To activate changes made to that file, perform the following operations:
+* Change `./modules/resource_group/ansible-inventory.yml` as desired
 * Deploy inventory into the Azure storage account by navigating to `./production/resource-group`, and running `terragrunt apply`
 * Run `./run-ansible.sh`
 
 ##### Debugging Ansible
-As ansible is run from a container within the Azure network, we need away to debug when things aren't working as expected.  To provide this ability, we simply need to uncomment out the `commands = ["sleep", "100000"]` on `resource "azurerm_container_group" "ansible"` found at .`/modules/resource-group/ansible-container.tf` (and then deploy these changes).  Once this is done, you will be able to exec onto this container from the Azure Console, and run ansible manually, or tweak configuration/code in-place.
+As ansible is run from a container within the Azure network, we need away to debug when things aren't working as expected.  To provide this ability, we simply need to uncomment out the `commands = ["sleep", "100000"]` on `resource "azurerm_container_group" "ansible"` found at .`/modules/resource_group/ansible-container.tf` (and then deploy these changes).  Once this is done, you will be able to exec onto this container from the Azure Console, and run ansible manually, or tweak configuration/code in-place.
 
 ![validation](docs/images/validation.png)
 

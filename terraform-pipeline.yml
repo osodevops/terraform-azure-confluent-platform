@@ -24,7 +24,7 @@ stages:
     - job: terraform_plan_resource_group
       steps:
         - script: |
-            cd production/resource-group
+            cd production/resource_group
             terragrunt plan
           displayName: 'terraform plan'
     - job: waitForValidation
@@ -44,7 +44,7 @@ stages:
       dependsOn: waitForValidation
       steps:
         - script: |
-            cd production/resource-group
+            cd production/resource_group
             terragrunt apply -auto-approve
           displayName: 'terraform apply'
 - stage: Broker
