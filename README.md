@@ -5,12 +5,8 @@ This module provides the ability to deploy the entire confluent suite on Azure w
 
 ### Getting Started
 #### Requirements
-* Terragrunt, please see [here](https://terragrunt.gruntwork.io/)
 * Terraform, please see [here](https://www.terraform.io/)
 * Azure-cli, please see [here](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
-
-#### Quick Start
-So long as the above requirements are met (and you have successfully authorised with Azure CLI), you can get started deploying to Azure right away by running `./tldr.sh`.  You can expect this process to take approximately 35 minutes; 10 min for the Terraform, and 25 min for the ansible provisioning.  At the end of the script, you will find a URL that will enable you to access control centre to see your working cluster where you will be able to start creating topics right away!  
 
 ### Pre-Deployment Tasks
 ##### Generate SSH keys for virtual machines
@@ -19,16 +15,13 @@ So long as the above requirements are met (and you have successfully authorised 
 
 ##### Create storage account for Terraform state
 * Sign in with [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/authenticate-azure-cli) (`az login`) 
-* Execute `./generate_state.sh` to create a standalone resource group and storage account to be used for terraform state
+* Execute `./generate_state.sh` to create a standalone resource group and storage account to be used for terraform state.  If you change any of the values in this script, you will need to update `./terraform/main/backend.tf` accordingly.
 
 ### Terraform Deployment
 #### Local Deployment
-With the terragrunt framework, we have the ability to deploy a single module (for example, navigating into ./production/zookeerp), and running `terragrunt plan`.
-Alternatively, we could navigate to the root of the environment (i.e. /production), and run `terragrunt run-all plan` to have a plan run against each module.  
+To deploy from local, navigate to `./production`, and run `terraform init && terraform plan`.  If you are happy with the output, you can run `terraform apply`
 
 **You can expect a full deployment off all components to take approximately 12 minutes**
-
-To deploy everything at once, navigate to `./production` and run `terragrunt run-all apply`
 
 ** note: pay attention to the output variable `public_ip_address`; this is the IP you will use to connect to Control Centre (port 9021), and RestProxy (port 8082)
 
@@ -42,7 +35,7 @@ Are you sure you want to run 'terragrunt apply' in each folder of the stack desc
 
 ### Ansible Deployment
 #### Command Line
-The terraform deployment deploys a Azure container group into a private subnet which has the ability to provision the newly created VMs with [cp-ansible](https://github.com/confluentinc/cp-ansible).  
+The terraform deployment deploys a Azure container group into a private subnet which has the ability to provision the newly created VMs with [cp-ansible](https://github.com/confluentinc/cp-ansible).  If you have made any alterations -- prefix, environment, additional instances, etc., you will need to update `./resource-group/ansible-inventory.yml` to reflect this.  Presently the inventory is working on the assumption of a single instance, so should, for example you wish to have 3 zookeeper instances, you would need to add `zookeeper-2.confluent.internal:` and `zookeeper-3.confluent.internal:` to this file otherwise cp-ansible will not attempt to provision these VMs 
 
 To run this container:
 ```
@@ -52,47 +45,10 @@ $ ./run-ansible.sh
 This process should take approximately 25 mins to complete.
 
 #### Azure Console (alternative deployment method)
-Via the Azure Console, simply find the container group named **oso-devops-cp-ansible** in the click the 'Start' button:
+Alternatively, aia the Azure Console, simply find the container group named **oso-devops-cp-ansible** in the click the 'Start' button:
 
 ![container](docs/images/azure_container.png)
 
-#### Deploying Azure DevOps (pipelines)
-##### Azure DevOps Predeployment Tasks
-* [Generate an Azure Devops PAT](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page); set an Environment variable named `AZDO_PERSONAL_ACCESS_TOKEN ` to this value.
-* For GitHub projects, you will need to [generate a PAT](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token); this will be used during the 'AzureDevOps' deployment.  Set this value to `AZDO_GITHUB_SERVICE_CONNECTION_PAT`
-* Set an environment varialble `AZDO_ORG_SERVICE_URL` to the value of your Azure DevOps organisation URL (i.e. https://dev.azure.com/osodevops)
-
-##### Deploying from pipeline
-* From within Azure DevOps, navigate to the 'Confluent Terraform Provisioning' pipeline job, and run the pipeline.
-The Confluent platform infrastructure is made up of the following resources
-
-```
-<environment>
-├── broker
-│   └── terragrunt.hcl
-├── control_centre
-│   └── terragrunt.hcl
-├── kafka_connect
-│   └── terragrunt.hcl
-├── ksql
-│   └── terragrunt.hcl
-└── resource_group
-│   └── terragrunt.hcl
-├── rest_proxy
-│   └── terragrunt.hcl
-├── schema_registry
-│   └── terragrunt.hcl
-├── zookeeper
-│   └── terragrunt.hcl
-└── env.hcl
-```
-
-To deploy the entire platform, review the automated 'terragrunt plan' stage of the 'CompletePlatform' job.  Review and approve the 'wait for external validation' stage if OK.  This will deploy all components of the Confluent Platform.  Alternatively, the service can be reviewed and deployed individually (note: the 'resource group' module must be deployed first as there is dependency of the service on this; this process is automated if deploying the 'CompletePlatform' job) 
-
-![validation](docs/images/validation.png)
-
-##### Configuring a build agent
-* In order to run the pipelines, a build agent is required.  Presently this is out of scope for this project, but either a properly configured self-hosted or microsoft hosted agent will work (see [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/agents?view=azure-devops&tabs=browser)).
 
 ### Considerations
 ##### Cluster customisations
