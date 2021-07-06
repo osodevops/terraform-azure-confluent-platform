@@ -11,6 +11,7 @@ module "rest-proxy" {
   azure_virtual_network_name = module.resource-group.virtual_network_name
   azure_subnet_name = var.private_subnet_name
   common_tags = local.common_tags
+  depends_on = [module.resource-group]
 }
 
 output "rest-proxy-ip" {

@@ -50,7 +50,8 @@ kafka_broker:
     kafka_broker_custom_properties:
       ldap.java.naming.factory.initial: com.sun.jndi.ldap.LdapCtxFactory
   hosts:
-    broker-1.confluent.internal:
+    broker-1.confluent.internalx:
+
 zookeeper:
   hosts:
     zookeeper-1.confluent.internal:

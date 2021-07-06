@@ -1,7 +1,7 @@
-module "ksql" {
+module "broker" {
   source = "../modules/confluent_node"
-  application = "ksql"
-  user_data_template = "default"
+  application = "broker"
+  user_data_template = "broker"
   admin_username = "osoadmin"
   cluster_instance_count = 1
   data_disk_size = 2048
@@ -11,6 +11,5 @@ module "ksql" {
   azure_virtual_network_name = module.resource-group.virtual_network_name
   azure_subnet_name = var.private_subnet_name
   common_tags = local.common_tags
-  depends_on = [module.resource-group]
 }
 

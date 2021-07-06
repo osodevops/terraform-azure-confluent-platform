@@ -1,6 +1,6 @@
-module "ksql" {
+module "schema-registry" {
   source = "../modules/confluent_node"
-  application = "ksql"
+  application = "schema-registry"
   user_data_template = "default"
   admin_username = "osoadmin"
   cluster_instance_count = 1
@@ -11,6 +11,5 @@ module "ksql" {
   azure_virtual_network_name = module.resource-group.virtual_network_name
   azure_subnet_name = var.private_subnet_name
   common_tags = local.common_tags
-  depends_on = [module.resource-group]
 }
 
