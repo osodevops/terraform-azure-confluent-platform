@@ -19,19 +19,11 @@ This module provides the ability to deploy the entire confluent suite on Azure w
 
 ### Terraform Deployment
 #### Local Deployment
-To deploy from local, navigate to `./production`, and run `terraform init && terraform plan`.  If you are happy with the output, you can run `terraform apply`
+##### Shared Resource Deployments
+To deploy from local, navigate to `./shared`, and run `terraform init && terraform plan`.  If you are happy with the output, you can run `terraform apply`
 
-**You can expect a full deployment off all components to take approximately 12 minutes**
-
-** note: pay attention to the output variable `public_ip_address`; this is the IP you will use to connect to Control Centre (port 9021), and RestProxy (port 8082)
-
-```
-➜  production git:(develop) ✗ terragrunt run-all apply
-INFO[0000] Stack at /home/azure-terraform-module-confluent/production:
-=> Module /home/azure-terraform-module-confluent/production/broker (excluded: false, dependencies: [/home/azure-terraform-module-confluent/production/resource_group])
-...
-Are you sure you want to run 'terragrunt apply' in each folder of the stack described above? (y/n)
-```
+##### Confluent deployment
+After the shared resource groups have successfully deployed, you can deploy the confluent VMs.  To do so, navigate to `./shared`, and run `terraform init && terraform plan`.  If you are happy with the output, you can run `terraform apply` 
 
 ### Ansible Deployment
 #### Command Line
@@ -47,20 +39,23 @@ This process should take approximately 25 mins to complete.
 #### Azure Console (alternative deployment method)
 Alternatively, aia the Azure Console, simply find the container group named **oso-devops-cp-ansible** in the click the 'Start' button:
 
-![container](docs/images/azure_container.png)
+![container](./azure_container.png)
 
 
 ### Considerations
 ##### Cluster customisations
+**NOTE**
+Sadly there is an [open bug in the azurerm provider](https://github.com/terraform-providers/terraform-provider-azurerm/issues/10888) which is preventing changes to the ansible-inventory.yml from being realised and uploaded (it should be performing an md5 verification on the file).  Until this bug has been solved, you will need to manually update the ansible-inventory.yml file either via CLI, or via the web console.  Once fixed, this will be the process:
+
 All properties/configurations/hostnames for the cluster are stored in the file `./modules/resource-group/ansible-inventory.yml`.  To activate changes made to that file, perform the following operations:
 * Change `./modules/resource-group/ansible-inventory.yml` as desired
 * Deploy inventory into the Azure storage account by navigating to `./production/resource-group`, and running `terragrunt apply`
 * Run `./run-ansible.sh`
 
+
+
 ##### Debugging Ansible
 As ansible is run from a container within the Azure network, we need away to debug when things aren't working as expected.  To provide this ability, we simply need to uncomment out the `commands = ["sleep", "100000"]` on `resource "azurerm_container_group" "ansible"` found at .`/modules/resource-group/ansible-container.tf` (and then deploy these changes).  Once this is done, you will be able to exec onto this container from the Azure Console, and run ansible manually, or tweak configuration/code in-place.
-
-![validation](docs/images/validation.png)
 
 ##### Additional Environments
 By using terragrunt's DRY approach, creating additional environments is very straight forward.  Simply copy the entire `production` folder to a new folder (i.e named `staging`), and you will be able to deploy in the same manner as production (The deployments are folder name aware).

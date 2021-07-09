@@ -12,8 +12,8 @@ provider "azurerm" {
 }
 
 data "terraform_remote_state" "shared" {
-  backend = "remote"
-  config {
+  backend = "azurerm"
+  config = {
     container_name       = "tfstate"
     key                  = "sandbox/terraform.shared.tfstate"
     resource_group_name  = "terraform-state"

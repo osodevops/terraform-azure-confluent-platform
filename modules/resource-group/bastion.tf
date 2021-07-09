@@ -3,6 +3,7 @@ resource "azurerm_virtual_network" "bastion" {
   address_space       = ["10.0.2.0/24"]
   location            = azurerm_resource_group.confluent.location
   resource_group_name = azurerm_resource_group.confluent.name
+  tags                = {}
 }
 
 resource "azurerm_subnet" "bastion-subnet" {
@@ -18,6 +19,8 @@ resource "azurerm_public_ip" "bastion-ip" {
   resource_group_name = azurerm_resource_group.confluent.name
   allocation_method   = "Static"
   sku                 = "Standard"
+  tags                    = {}
+  zones                   = []
 }
 
 resource "azurerm_bastion_host" "example" {
