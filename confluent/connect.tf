@@ -1,4 +1,4 @@
-module "broker" {
+module "connect" {
   source = "../modules/confluent_node"
   application = "connect"
   user_data_template = "default"
