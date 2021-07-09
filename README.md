@@ -1,7 +1,7 @@
 [<img src="https://osodevops.io/assets/images/logo-purple-b3af53cc.svg" width="250"/>](https://osodevops.io)
 
 #Overview
-This module provides the ability to deploy the entire confluent suite on Azure with a single command.  It achieves this by leveraging Terraform to build out the Azure infrastructure.  Within this infrastructure exists a container group which runs the docker image [osodevops/cp-ansible](https://github.com/osodevops/docker-cp-ansible) which is used to provision the confluent virtual machines.  This solution is not intended as a hardened production environment but rather provides a way to get running with Confluent on Azure *QUICKLY*.
+This module provides the ability to deploy the entire confluent suite on Azure with three simple commands.  It achieves this by leveraging Terraform to build out the Azure infrastructure.  Within this infrastructure exists a container group which runs the docker image [osodevops/cp-ansible](https://github.com/osodevops/docker-cp-ansible) which is used to provision the confluent virtual machines.  This solution is not intended as a hardened production environment but rather provides a way to get running with Confluent on Azure *QUICKLY*.
 
 ### Getting Started
 #### Requirements
@@ -15,7 +15,7 @@ This module provides the ability to deploy the entire confluent suite on Azure w
 
 ##### Create storage account for Terraform state
 * Sign in with [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/authenticate-azure-cli) (`az login`) 
-* Execute `./generate_state.sh` to create a standalone resource group and storage account to be used for terraform state.  If you change any of the values in this script, you will need to update `./terraform/main/backend.tf` accordingly.
+* Execute `./generate_state.sh` to create a standalone resource group and storage account to be used for terraform state.  If you change any of the values in this script, you will need to update the `backend.tf` files accordingly.
 
 ### Terraform Deployment
 #### Local Deployment
@@ -23,11 +23,11 @@ This module provides the ability to deploy the entire confluent suite on Azure w
 To deploy from local, navigate to `./shared`, and run `terraform init && terraform plan`.  If you are happy with the output, you can run `terraform apply`
 
 ##### Confluent deployment
-After the shared resource groups have successfully deployed, you can deploy the confluent VMs.  To do so, navigate to `./shared`, and run `terraform init && terraform plan`.  If you are happy with the output, you can run `terraform apply` 
+After the shared resource groups have successfully deployed, you can deploy the confluent VMs.  To do so, navigate to `./confluent`, and run `terraform init && terraform plan`.  If you are happy with the output, you can run `terraform apply` 
 
 ### Ansible Deployment
 #### Command Line
-The terraform deployment deploys a Azure container group into a private subnet which has the ability to provision the newly created VMs with [cp-ansible](https://github.com/confluentinc/cp-ansible).  If you have made any alterations -- prefix, environment, additional instances, etc., you will need to update `./resource-group/ansible-inventory.yml` to reflect this.  Presently the inventory is working on the assumption of a single instance, so should, for example you wish to have 3 zookeeper instances, you would need to add `zookeeper-2.confluent.internal:` and `zookeeper-3.confluent.internal:` to this file otherwise cp-ansible will not attempt to provision these VMs 
+The terraform deployment deploys an Azure container group into a private subnet which has the ability to provision the newly created VMs with [cp-ansible](https://github.com/confluentinc/cp-ansible).  If you have made any alterations -- prefix, environment, additional instances, etc., you will need to update `./resource-group/ansible-inventory.yml` to reflect this.  Presently the inventory is working on the assumption of a single instance, so should, for example you wish to have 3 zookeeper instances, you would need to add `zookeeper-2.confluent.internal:` and `zookeeper-3.confluent.internal:` to this file otherwise cp-ansible will not attempt to provision these VMs 
 
 To run this container:
 ```
