@@ -36,7 +36,7 @@ Terraform is used to provision all required Azure resources, the deployment has 
 - [x] KSQL VM with network interface and data disk.
 - [x] Rest Proxy VM with network interface and data disk.
 - [x] Confluent Control Centre VM with network interface and data disk.
-- [x] Public IP for Control Center.
+- [x] Public IPs for Control Center and Rest Proxy.
 
 ##### Shared Resource Deployments
 To deploy from local, navigate to `./shared`, and run `terraform init && terraform plan`.  If you are happy with the output, you can run `terraform apply`
