@@ -53,7 +53,32 @@ To run this container:
 $ ./run-ansible.sh
 ```
 
-This process should take approximately 25 mins to complete.
+This process should take approximately 25 mins to complete. The complete process will output:
+```shell
+Thursday 15 July 2021  10:54:10 +0000 (0:00:00.045)       0:19:24.310 *********
+===============================================================================
+confluent.common : Install Java --------------------------------------- 178.52s
+confluent.ksql : Install the KSQL Packages ---------------------------- 173.26s
+confluent.kafka_rest : Install the Kafka Rest Packages ---------------- 153.52s
+confluent.control_center : Install the Control Center Packages -------- 147.18s
+confluent.schema_registry : Install the Schema Registry Packages ------ 116.37s
+confluent.kafka_broker : Install the Kafka Broker Packages ------------ 109.67s
+confluent.zookeeper : Install the Zookeeper Packages ------------------- 66.41s
+confluent.control_center : Startup Delay ------------------------------- 30.26s
+confluent.kafka_broker : Startup Delay --------------------------------- 20.23s
+confluent.kafka_rest : Startup Delay ----------------------------------- 20.22s
+confluent.schema_registry : Startup Delay ------------------------------ 20.21s
+confluent.ksql : Startup Delay ----------------------------------------- 20.21s
+confluent.common : Gather OS Facts -------------------------------------- 7.37s
+confluent.zookeeper : Startup Delay ------------------------------------- 5.93s
+confluent.common : Add Max Size Properties ------------------------------ 4.90s
+confluent.common : yum-clean-all ---------------------------------------- 4.42s
+confluent.common : Install OpenSSL and Unzip ---------------------------- 2.69s
+confluent.common : Add Confluent Dist Yum Repo -------------------------- 2.40s
+confluent.kafka_broker : Create Kafka Broker Config --------------------- 2.11s
+confluent.zookeeper : Create Zookeeper myid File ------------------------ 1.92s
+```
+
 
 #### Azure Console (alternative deployment method)
 Alternatively, aia the Azure Console, simply find the container group named **oso-devops-cp-ansible** in the click the 'Start' button:
