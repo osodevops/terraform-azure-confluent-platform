@@ -27,8 +27,8 @@ all:
     ksql_ldap_password: "ksql-user"
     kafka_rest_ldap_user: "kafka-rest-user"
     kafka_rest_ldap_password: "kafka-rest-user"
-    control_center_ldap_user: "control-centre-user"
-    control_center_ldap_password: "control-centre-user"
+    control_center_ldap_user: "control-center-user"
+    control_center_ldap_password: "control-center-user"
 
     zookeeper_sasl_protocol: none
     zookeeper_ssl_enabled: false
@@ -59,7 +59,7 @@ schema_registry:
     schema-registry-1.confluent.internal:
 control_center:
   hosts:
-    control-centre-1.confluent.internal:
+    control-center-1.confluent.internal:
 kafka_connect:
   hosts:
     kafka-connect-1.confluent.internal:

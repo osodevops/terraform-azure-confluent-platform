@@ -93,7 +93,9 @@ resource "azurerm_storage_share" "ssh" {
 resource "azurerm_storage_share_file" "ansible-inventory" {
   name             = "ansible-inventory.yml"
   storage_share_id = azurerm_storage_share.ssh.id
+//  content_md5      = md5(file("${path.module}/ansible-inventory.yml"))
   source           = "${path.module}/ansible-inventory.yml"
+//  metadata         = {}
 }
 
 resource "azurerm_storage_share_file" "ssh-priv-key" {

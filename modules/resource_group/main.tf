@@ -1,6 +1,7 @@
 resource "azurerm_resource_group" "confluent" {
   name     = "${local.uid}-resources"
   location = var.location
+  tags     = {}
 }
 
 resource "azurerm_virtual_network" "confluent" {
