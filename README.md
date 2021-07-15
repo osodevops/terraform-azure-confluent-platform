@@ -1,6 +1,6 @@
 [<img src="https://osodevops.io/assets/images/logo-purple-b3af53cc.svg" width="250"/>](https://osodevops.io)
 
-#Overview
+# Overview
 This module provides the ability to deploy the entire confluent suite on Azure with three simple commands.  It achieves this by leveraging Terraform to build out the Azure infrastructure.  Within this infrastructure exists a container group which runs the docker image [osodevops/cp-ansible](https://github.com/osodevops/docker-cp-ansible) which is used to provision the confluent virtual machines.  This solution is not intended as a hardened production environment but rather provides a way to get running with Confluent on Azure *QUICKLY*.
 
 ### Getting Started
@@ -18,7 +18,26 @@ This module provides the ability to deploy the entire confluent suite on Azure w
 * Execute `./generate_state.sh` to create a standalone resource group and storage account to be used for terraform state.  If you change any of the values in this script, you will need to update the `backend.tf` files accordingly.
 
 ### Terraform Deployment
-#### Local Deployment
+Terraform is used to provision all required Azure resources, the deployment has been split up into 2 parts:
+
+**Shared:**
+- [x] Private Virtual network. 
+- [x] Private and public subnets.
+- [x] NAT gateway.
+- [x] Private DNS zone.
+- [x] Bastion Server with public IP.
+- [x] Container service for cp-ansible provisioning.
+
+**Confluent:**
+- [x] Zookeeper VM with network interface and data disk.
+- [x] Broker VM with network interface and data disk.
+- [x] Schema Registry VM with network interface and data disk.
+- [x] Kafka Connect VM with network interface and data disk.
+- [x] KSQL VM with network interface and data disk.
+- [x] Rest Proxy VM with network interface and data disk.
+- [x] Confluent Control Centre VM with network interface and data disk.
+- [x] Public IP for Control Center.
+
 ##### Shared Resource Deployments
 To deploy from local, navigate to `./shared`, and run `terraform init && terraform plan`.  If you are happy with the output, you can run `terraform apply`
 
