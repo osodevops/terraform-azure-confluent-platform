@@ -1,5 +1,5 @@
 module "resource-group" {
-  source = "../modules/resource-group"
+  source = "../modules/resource_group"
   prefix = var.prefix
   environment = var.environment
   location = var.azure_location
