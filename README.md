@@ -38,10 +38,10 @@ Terraform is used to provision all required Azure resources, the deployment has 
 - [x] Confluent Control Centre VM with network interface and data disk.
 - [x] Public IPs for Control Center and Rest Proxy.
 
-##### Shared Resource Deployments
+#### Shared Resource Deployments
 To deploy from local, navigate to `./shared`, and run `terraform init && terraform plan`.  If you are happy with the output, you can run `terraform apply`
 
-##### Confluent deployment
+#### Confluent deployment
 After the shared resource groups have successfully deployed, you can deploy the confluent VMs.  To do so, navigate to `./confluent`, and run `terraform init && terraform plan`.  If you are happy with the output, you can run `terraform apply` 
 
 ### Ansible Deployment
