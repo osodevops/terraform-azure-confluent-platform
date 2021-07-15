@@ -101,5 +101,5 @@ resource "azurerm_storage_share_file" "ansible-inventory" {
 resource "azurerm_storage_share_file" "ssh-priv-key" {
   name             = "id_rsa"
   storage_share_id = azurerm_storage_share.ssh.id
-  source           = "${path.module}/oso-confluent-ssh"
+  source           = "${path.module}/oso-confluent-ssh.pem"
 }
