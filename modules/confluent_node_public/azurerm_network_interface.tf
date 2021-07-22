@@ -34,14 +34,3 @@ resource "azurerm_public_ip" "node-ip" {
   allocation_method   = "Static"
   sku                 = "Standard"
 }
-
-data "azurerm_network_security_group" "node" {
-  name                = var.azure_subnet_name
-  resource_group_name = data.azurerm_resource_group.resource_group.name
-}
-
-resource "azurerm_network_interface_security_group_association" "nic-association" {
-  count = var.cluster_instance_count
-  network_interface_id          = azurerm_network_interface.cluster_interface[count.index].id
-  network_security_group_id = data.azurerm_network_security_group.node.id
-}

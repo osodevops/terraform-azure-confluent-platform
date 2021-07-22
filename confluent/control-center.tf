@@ -16,3 +16,17 @@ module "control-center" {
 output "control-center-ip" {
   value = module.control-center.public_ip_address
 }
+
+resource "azurerm_network_security_rule" "control-centre" {
+  name                       = "control-centre"
+  priority                   = 200
+  direction                  = "Inbound"
+  access                     = "Allow"
+  protocol                   = "Tcp"
+  source_port_range          = "*"
+  destination_port_ranges     = ["9021"]
+  source_address_prefix      = "*"
+  destination_address_prefix = "*"
+  resource_group_name        = data.terraform_remote_state.shared.outputs.resource-group-name
+  network_security_group_name = module.control-center.security_group
+}

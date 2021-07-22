@@ -16,3 +16,18 @@ module "rest-proxy" {
 output "rest-proxy-ip" {
   value = module.rest-proxy.public_ip_address
 }
+
+
+resource "azurerm_network_security_rule" "rest_proxy" {
+  name                       = "rest-proxy"
+  priority                   = 200
+  direction                  = "Inbound"
+  access                     = "Allow"
+  protocol                   = "Tcp"
+  source_port_range          = "*"
+  destination_port_ranges     = ["8082"]
+  source_address_prefix      = "*"
+  destination_address_prefix = "*"
+  resource_group_name        = data.terraform_remote_state.shared.outputs.resource-group-name
+  network_security_group_name = module.control-center.security_group
+}
