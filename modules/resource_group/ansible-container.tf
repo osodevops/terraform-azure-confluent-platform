@@ -1,5 +1,5 @@
 #TODO: Template out these CIDR ranges
-resource "azurerm_subnet" "container" {
+resource azurerm_subnet container {
   name                 = "container-deployments"
   virtual_network_name = azurerm_virtual_network.confluent.name
   resource_group_name  = azurerm_resource_group.confluent.name
@@ -15,7 +15,7 @@ resource "azurerm_subnet" "container" {
   }
 }
 
-resource "azurerm_network_profile" "cp-ansible" {
+resource azurerm_network_profile cp-ansible {
   name                = "cp-ansible-networkprofile"
   location            = azurerm_resource_group.confluent.location
   resource_group_name = azurerm_resource_group.confluent.name
@@ -30,7 +30,7 @@ resource "azurerm_network_profile" "cp-ansible" {
   }
 }
 
-resource "azurerm_container_group" "ansible" {
+resource azurerm_container_group ansible {
   name                = "oso-devops-cp-ansible"
   location            = azurerm_resource_group.confluent.location
   resource_group_name = azurerm_resource_group.confluent.name
@@ -63,7 +63,7 @@ resource "azurerm_container_group" "ansible" {
   }
 }
 
-resource "azurerm_storage_account" "cp-ansible" {
+resource azurerm_storage_account cp-ansible {
   name                     = "cpansible"
   resource_group_name      = azurerm_resource_group.confluent.name
   location                 = azurerm_resource_group.confluent.location
@@ -71,13 +71,13 @@ resource "azurerm_storage_account" "cp-ansible" {
   account_replication_type = "LRS"
 }
 
-resource "azurerm_storage_container" "ssh-container" {
+resource azurerm_storage_container ssh-container {
   name                  = "content"
   storage_account_name  = azurerm_storage_account.cp-ansible.name
   container_access_type = "private"
 }
 
-resource "azurerm_storage_share" "ssh" {
+resource azurerm_storage_share ssh {
   name                 = "ansible-ssh"
   storage_account_name = azurerm_storage_account.cp-ansible.name
   quota                = 50
@@ -90,7 +90,7 @@ resource "azurerm_storage_share" "ssh" {
   }
 }
 
-resource "azurerm_storage_share_file" "ansible-inventory" {
+resource azurerm_storage_share_file ansible-inventory {
   name             = "ansible-inventory.yml"
   storage_share_id = azurerm_storage_share.ssh.id
 //  content_md5      = md5(file("${path.module}/ansible-inventory.yml"))
@@ -98,7 +98,7 @@ resource "azurerm_storage_share_file" "ansible-inventory" {
 //  metadata         = {}
 }
 
-resource "azurerm_storage_share_file" "ssh-priv-key" {
+resource azurerm_storage_share_file ssh-priv-key {
   name             = "id_rsa"
   storage_share_id = azurerm_storage_share.ssh.id
   source           = "${path.module}/oso-confluent-ssh.pem"

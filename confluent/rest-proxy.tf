@@ -1,4 +1,4 @@
-module "rest-proxy" {
+module rest_proxy {
   source = "../modules/confluent_node_public"
   application = "rest-proxy"
   user_data_template = "default"
@@ -7,18 +7,18 @@ module "rest-proxy" {
   data_disk_size = 0
   environment = "sandbox"
   dns_zone = var.dns_zone
-  azure_resource_group_name = data.terraform_remote_state.shared.outputs.resource-group-name
-  azure_virtual_network_name = data.terraform_remote_state.shared.outputs.virtual-network-name
+  azure_resource_group_name = data.terraform_remote_state.shared.outputs.resource_group_name
+  azure_virtual_network_name = data.terraform_remote_state.shared.outputs.virtual_network_name
   azure_subnet_name = var.private_subnet_name
   common_tags = local.common_tags
 }
 
-output "rest-proxy-ip" {
-  value = module.rest-proxy.public_ip_address
+output rest-proxy-ip {
+  value = module.rest_proxy.public_ip_address
 }
 
 
-resource "azurerm_network_security_rule" "rest_proxy" {
+resource azurerm_network_security_rule rest_proxy {
   name                       = "rest-proxy"
   priority                   = 200
   direction                  = "Inbound"
@@ -28,6 +28,6 @@ resource "azurerm_network_security_rule" "rest_proxy" {
   destination_port_ranges     = ["8082"]
   source_address_prefix      = "*"
   destination_address_prefix = "*"
-  resource_group_name        = data.terraform_remote_state.shared.outputs.resource-group-name
-  network_security_group_name = module.control-center.security_group
+  resource_group_name        = data.terraform_remote_state.shared.outputs.resource_group_name
+  network_security_group_name = module.rest_proxy.security_group
 }

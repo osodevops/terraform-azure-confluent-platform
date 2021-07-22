@@ -14,7 +14,7 @@ resource azurerm_network_interface cluster_interface {
 }
 
 
-resource "azurerm_private_dns_a_record" "node" {
+resource azurerm_private_dns_a_record node {
   count = var.cluster_instance_count
   name                = "${var.application}-${count.index + 1}"
   resource_group_name = var.azure_resource_group_name
@@ -24,4 +24,15 @@ resource "azurerm_private_dns_a_record" "node" {
     azurerm_linux_virtual_machine.cluster[count.index].private_ip_address
   ]
   depends_on = [azurerm_linux_virtual_machine.cluster]
+}
+
+data azurerm_network_security_group node {
+  name                = var.azure_subnet_name
+  resource_group_name = data.azurerm_resource_group.resource_group.name
+}
+
+resource "azurerm_network_interface_security_group_association" "nic-association" {
+  count = var.cluster_instance_count
+  network_interface_id          = azurerm_network_interface.cluster_interface[count.index].id
+  network_security_group_id = data.azurerm_network_security_group.node.id
 }

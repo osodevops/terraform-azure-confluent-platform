@@ -1,4 +1,4 @@
-resource "azurerm_managed_disk" "cluster_data_disk_01" {
+resource azurerm_managed_disk cluster_data_disk_01 {
   count = var.data_disk_size > 0 ? var.cluster_instance_count : 0
 
   name = "${azurerm_linux_virtual_machine.cluster[count.index].name}-disk-02"
@@ -10,7 +10,7 @@ resource "azurerm_managed_disk" "cluster_data_disk_01" {
   tags = var.common_tags
 }
 
-resource "azurerm_virtual_machine_data_disk_attachment" "cluster_data_disk_01_attachment" {
+resource azurerm_virtual_machine_data_disk_attachment cluster_data_disk_01_attachment {
   count = var.data_disk_size > 0 ? var.cluster_instance_count : 0
 
   managed_disk_id = azurerm_managed_disk.cluster_data_disk_01[count.index].id

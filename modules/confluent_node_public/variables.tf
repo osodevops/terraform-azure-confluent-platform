@@ -37,10 +37,10 @@ variable cluster_instance_type {
   description = "VM size"
   default     = "Standard_D8as_v4"
 }
-variable "dns_zone" {
+variable dns_zone {
   description = "The DNS zone the VMs A record will be associated to"
 }
-variable "root_disk_size" {
+variable root_disk_size {
   type    = number
   default = 64
 }
@@ -63,7 +63,7 @@ variable common_tags {
   description = "Common set of tags to apply to all resources created by the modules"
   default     = {}
 }
-variable "user_data_template" {
+variable user_data_template {
   description = "The user_data template to use on cloud init"
   default = "default"
 }

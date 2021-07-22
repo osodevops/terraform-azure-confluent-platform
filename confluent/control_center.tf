@@ -1,4 +1,4 @@
-module "control-center" {
+module control_center {
   source = "../modules/confluent_node_public"
   application = "control-center"
   user_data_template = "default"
@@ -7,17 +7,17 @@ module "control-center" {
   data_disk_size = 0
   environment = "sandbox"
   dns_zone = var.dns_zone
-  azure_resource_group_name = data.terraform_remote_state.shared.outputs.resource-group-name
-  azure_virtual_network_name = data.terraform_remote_state.shared.outputs.virtual-network-name
+  azure_resource_group_name = data.terraform_remote_state.shared.outputs.resource_group_name
+  azure_virtual_network_name = data.terraform_remote_state.shared.outputs.virtual_network_name
   azure_subnet_name = var.private_subnet_name
   common_tags = local.common_tags
 }
 
-output "control-center-ip" {
-  value = module.control-center.public_ip_address
+output control_center_ip {
+  value = module.control_center.public_ip_address
 }
 
-resource "azurerm_network_security_rule" "control-centre" {
+resource azurerm_network_security_rule control_centre {
   name                       = "control-centre"
   priority                   = 200
   direction                  = "Inbound"
@@ -27,6 +27,6 @@ resource "azurerm_network_security_rule" "control-centre" {
   destination_port_ranges     = ["9021"]
   source_address_prefix      = "*"
   destination_address_prefix = "*"
-  resource_group_name        = data.terraform_remote_state.shared.outputs.resource-group-name
-  network_security_group_name = module.control-center.security_group
+  resource_group_name        = data.terraform_remote_state.shared.outputs.resource_group_name
+  network_security_group_name = module.control_center.security_group
 }

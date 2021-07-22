@@ -1,8 +1,8 @@
-output "resource-group-name" {
-  value = module.resource-group.resource-group-name
+output resource_group_name {
+  value = module.resource-group.resource_group_name
 }
-output "virtual-network-name" {
-  value = module.resource-group.virtual-network-name
+output virtual_network_name {
+  value = module.resource-group.virtual_network_name
 }
 
 

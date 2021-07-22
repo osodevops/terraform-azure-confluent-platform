@@ -1,4 +1,4 @@
-resource "azurerm_linux_virtual_machine" "cluster" {
+resource azurerm_linux_virtual_machine cluster {
   count = var.cluster_instance_count
   name = "${local.uid}-vm-${format("%02d", count.index + 1)}"
   location            = data.azurerm_resource_group.resource_group.location
