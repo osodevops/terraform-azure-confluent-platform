@@ -62,7 +62,7 @@ control_center:
     control-center-1.confluent.internal:
 kafka_connect:
   hosts:
-    kafka-connect-1.confluent.internal:
+    connect-1.confluent.internal:
 kafka_rest:
   hosts:
     rest-proxy-1.confluent.internal:
