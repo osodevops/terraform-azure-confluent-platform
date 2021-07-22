@@ -41,7 +41,7 @@ resource azurerm_container_group ansible {
 
   container {
     name   = "cp-ansible"
-    image  = "osodevops/cp-ansible:${var.cp-ansible-version}"
+    image  = "osodevops/cp-ansible:${var.cp_ansible_version}"
     cpu    = "0.5"
     memory = "1.5"
     // Uncomment this to exec onto container for debug purposes

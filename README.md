@@ -15,7 +15,7 @@ This module provides the ability to deploy the entire confluent suite on Azure w
 
 ##### Create storage account for Terraform state
 * Sign in with [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/authenticate-azure-cli) (`az login`) 
-* Execute `./generate_state.sh` to create a standalone resource group and storage account to be used for terraform state.  If you change any of the values in this script, you will need to update the `backend.tf` files accordingly.
+* Execute `./state_generation.sh` to create a standalone resource group and storage account to be used for terraform state.  If you change any of the values in this script, you will need to update the `backend.tf` files accordingly.
 
 ### Terraform Deployment
 Terraform is used to provision all required Azure resources, the deployment has been split up into 2 parts:
