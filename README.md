@@ -3,6 +3,13 @@
 # Overview
 This module provides the ability to deploy the entire confluent suite on Azure with three simple commands.  It achieves this by leveraging Terraform to build out the Azure infrastructure.  Within this infrastructure exists a container group which runs the docker image [osodevops/cp-ansible](https://github.com/osodevops/docker-cp-ansible) which is used to provision the confluent virtual machines.  This solution is not intended as a hardened production environment but rather provides a way to get running with Confluent on Azure *QUICKLY*.
 
+The code here consists of a Terraform modules together with a set of Ansible roles provided by Confluent to install and configure Confluent Platform.
+
+### Diagram
+
+![solution_diagram](https://lucid.app/publicSegments/view/5be7692e-bc0e-4c35-88af-6e61f81153ba/image.png)
+
+
 ### Getting Started
 #### Requirements
 * Terraform, please see [here](https://www.terraform.io/)
