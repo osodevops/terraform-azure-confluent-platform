@@ -7,11 +7,11 @@ terraform {
   }
 }
 
-provider "azurerm" {
+provider azurerm {
   features {}
 }
 
-data "terraform_remote_state" "shared" {
+data terraform_remote_state shared {
   backend = "azurerm"
   config = {
     container_name       = "tfstate"

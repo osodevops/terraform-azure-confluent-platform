@@ -1,4 +1,4 @@
-resource "azurerm_subnet" "private" {
+resource azurerm_subnet private {
   name                 = var.private_subnet_name
   virtual_network_name = azurerm_virtual_network.confluent.name
   resource_group_name  = azurerm_resource_group.confluent.name
@@ -7,7 +7,7 @@ resource "azurerm_subnet" "private" {
 
 
 # Create network security group and SSH rule for public subnet.
-resource "azurerm_network_security_group" "private" {
+resource azurerm_network_security_group private {
   name                = "confluent-private"
   location            = var.location
   resource_group_name = azurerm_resource_group.confluent.name
@@ -81,7 +81,7 @@ resource "azurerm_network_security_group" "private" {
 //}
 
 # Associate network security group with public subnet.
-resource "azurerm_subnet_network_security_group_association" "private_subnet_assoc" {
+resource azurerm_subnet_network_security_group_association private_subnet_assoc {
   subnet_id                 = azurerm_subnet.private.id
   network_security_group_id = azurerm_network_security_group.private.id
 }

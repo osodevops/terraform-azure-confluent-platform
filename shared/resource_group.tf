@@ -1,4 +1,4 @@
-module "resource-group" {
+module resource_group {
   source = "../modules/resource_group"
   prefix = var.prefix
   environment = var.environment
