@@ -1,7 +1,7 @@
-module zookeeper {
-  source = "../modules/confluent_node"
-  application = "zookeeper"
-  user_data_template = "default"
+module broker {
+  source = "..\/..\/modules\/confluent_node"
+  application = "broker"
+  user_data_template = "broker"
   admin_username = "osoadmin"
   cluster_instance_count = 1
   data_disk_size = 2048

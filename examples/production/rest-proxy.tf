@@ -1,5 +1,5 @@
 module rest_proxy {
-  source = "../modules/confluent_node_public"
+  source = "..\/..\/modules\/confluent_node_public"
   application = "rest-proxy"
   user_data_template = "default"
   admin_username = "osoadmin"

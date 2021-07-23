@@ -1,10 +1,10 @@
-module broker {
-  source = "../modules/confluent_node"
-  application = "broker"
-  user_data_template = "broker"
+module ksql {
+  source = "..\/..\/modules\/confluent_node"
+  application = "ksql"
+  user_data_template = "default"
   admin_username = "osoadmin"
   cluster_instance_count = 1
-  data_disk_size = 2048
+  data_disk_size = 0
   environment = "sandbox"
   dns_zone = var.dns_zone
   azure_resource_group_name = data.terraform_remote_state.shared.outputs.resource_group_name

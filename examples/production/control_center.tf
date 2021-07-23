@@ -1,5 +1,5 @@
 module control_center {
-  source = "../modules/confluent_node_public"
+  source = "..\/..\/modules\/confluent_node_public"
   application = "control-center"
   user_data_template = "default"
   admin_username = "osoadmin"

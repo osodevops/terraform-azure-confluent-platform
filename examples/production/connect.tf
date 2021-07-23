@@ -1,6 +1,6 @@
-module schema_registry {
-  source = "../modules/confluent_node"
-  application = "schema-registry"
+module connect {
+  source = "..\/..\/modules\/confluent_node"
+  application = "connect"
   user_data_template = "default"
   admin_username = "osoadmin"
   cluster_instance_count = 1
@@ -12,4 +12,3 @@ module schema_registry {
   azure_subnet_name = var.private_subnet_name
   common_tags = local.common_tags
 }
-
