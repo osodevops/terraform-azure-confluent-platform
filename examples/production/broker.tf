@@ -1,5 +1,5 @@
 module broker {
-  source = "..\/..\/modules\/confluent_node"
+  source = "../../modules/confluent_node"
   application = "broker"
   user_data_template = "broker"
   admin_username = "osoadmin"

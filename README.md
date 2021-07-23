@@ -46,10 +46,10 @@ Terraform is used to provision all required Azure resources, the deployment has 
 - [x] Public IPs for Control Center and Rest Proxy.
 
 #### Shared Resource Deployments
-To deploy from local, navigate to `./shared`, and run `terraform init && terraform plan`.  If you are happy with the output, you can run `terraform apply`
+To deploy from local, navigate to `./examples/shared`, and run `terraform init && terraform plan`.  If you are happy with the output, you can run `terraform apply`
 
 #### Confluent deployment
-After the shared resource groups have successfully deployed, you can deploy the confluent VMs.  To do so, navigate to `./confluent`, and run `terraform init && terraform plan`.  If you are happy with the output, you can run `terraform apply` 
+After the shared resource groups have successfully deployed, you can deploy the confluent VMs.  To do so, navigate to `./examples/production`, and run `terraform init && terraform plan`.  If you are happy with the output, you can run `terraform apply` 
 
 ### Ansible Deployment
 #### Command Line

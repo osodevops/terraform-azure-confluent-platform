@@ -1,5 +1,5 @@
 module zookeeper {
-  source = "..\/..\/modules\/confluent_node"
+  source = "../../modules/confluent_node"
   application = "zookeeper"
   user_data_template = "default"
   admin_username = "osoadmin"

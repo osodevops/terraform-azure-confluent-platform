@@ -1,5 +1,5 @@
 module schema_registry {
-  source = "..\/..\/modules\/confluent_node"
+  source = "../../modules/confluent_node"
   application = "schema-registry"
   user_data_template = "default"
   admin_username = "osoadmin"
