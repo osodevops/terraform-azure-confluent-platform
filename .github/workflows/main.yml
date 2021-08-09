@@ -1,0 +1,52 @@
+name: Verify and Bump
+on:
+  push:
+    branches:
+      - main
+
+env:
+  terraform: 1.0.1
+  tf_target_dir: examples/shared
+  branch: main
+
+jobs:
+  terraform:
+    env:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.branch }}
+          token: ${{ github.token }}
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ${{ env.tf_target_dir }}
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: ${{ env.tf_target_dir }}
+      - name: Terraform Plan
+        run: terraform plan
+        working-directory: ${{ env.tf_target_dir }}
+        env:
+          TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
+          TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
+          TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
+  version:
+    name: versioning
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@master
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          DEFAULT_BUMP: patch
+          WITH_V: "true"
+    needs: [terraform]
