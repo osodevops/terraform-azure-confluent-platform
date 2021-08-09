@@ -28,14 +28,16 @@ The code here consists of a Terraform modules together with a set of Ansible rol
 Terraform is used to provision all required Azure resources, the deployment has been split up into 2 parts:
 
 **Shared:**
+```html
 - [x] Private Virtual network. 
 - [x] Private and public subnets.
 - [x] NAT gateway.
 - [x] Private DNS zone.
 - [x] Bastion Server with public IP.
 - [x] Container service for cp-ansible provisioning.
-
+```
 **Confluent:**
+```html
 - [x] Zookeeper VM with network interface and data disk.
 - [x] Broker VM with network interface and data disk.
 - [x] Schema Registry VM with network interface and data disk.
@@ -44,7 +46,7 @@ Terraform is used to provision all required Azure resources, the deployment has 
 - [x] Rest Proxy VM with network interface and data disk.
 - [x] Confluent Control Centre VM with network interface and data disk.
 - [x] Public IPs for Control Center and Rest Proxy.
-
+```
 #### Shared Resource Deployments
 To deploy from local, navigate to `./examples/shared`, and run `terraform init && terraform plan`.  If you are happy with the output, you can run `terraform apply`
 
@@ -123,7 +125,7 @@ Please use the [issue tracker](https://github.com/osodevops/azure-terraform-modu
 
 ## Copyrights
 
-Copyright © 2019-2020 [OSO DevOps](https://osodevops.io)
+Copyright © 2019-2021 [OSO DevOps](https://osodevops.io)
 
 ## License
 
@@ -138,8 +140,6 @@ We help organisations accelerate their capabilities for application delivery and
 
 Check out [our other projects][github], [follow us on twitter][twitter], or [hire us][hire] to help with your cloud strategy and implementation.
 
-[![README Footer][readme_footer_img]][readme_footer_link]
-[![Beacon][beacon]][website]
 
 [logo]: https://osodevops.io/assets/images/logo-purple-b3af53cc.svg
 [website]: https://osodevops.io/
