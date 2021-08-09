@@ -1,5 +1,7 @@
 [<img src="https://osodevops.io/assets/images/logo-purple-b3af53cc.svg" width="250"/>](https://osodevops.io)
 
+<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" checked=""> Zookeeper VM with network interface and data disk.</li>
+
 # Overview
 This module provides the ability to deploy the entire confluent suite on Azure with three simple commands.  It achieves this by leveraging Terraform to build out the Azure infrastructure.  Within this infrastructure exists a container group which runs the docker image [osodevops/cp-ansible](https://github.com/osodevops/docker-cp-ansible) which is used to provision the confluent virtual machines.  This solution is not intended as a hardened production environment but rather provides a way to get running with Confluent on Azure *QUICKLY*.
 
