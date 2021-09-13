@@ -25,13 +25,13 @@ jobs:
           ref: ${{ env.branch }}
           token: ${{ github.token }}
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -backend-config=backend.hcl
         working-directory: ${{ env.tf_target_dir }}
       - name: Terraform Validate
-        run: terraform validate
+        run: terraform validate -backend-config=backend.hcl
         working-directory: ${{ env.tf_target_dir }}
       - name: Terraform Plan
-        run: terraform plan
+        run: terraform plan -backend-config=backend.hcl
         working-directory: ${{ env.tf_target_dir }}
         env:
           TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
