@@ -28,10 +28,10 @@ jobs:
         run: terraform init -backend-config=backend.hcl
         working-directory: ${{ env.tf_target_dir }}
       - name: Terraform Validate
-        run: terraform validate -backend-config=backend.hcl
+        run: terraform validate
         working-directory: ${{ env.tf_target_dir }}
       - name: Terraform Plan
-        run: terraform plan -backend-config=backend.hcl
+        run: terraform plan
         working-directory: ${{ env.tf_target_dir }}
         env:
           TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
