@@ -5,8 +5,8 @@ on:
       - main
 
 env:
-  terraform: 1.0.1
-  tf_target_dir: examples/shared
+  terraform: 1.0.4
+  tf_target_dir: examples/production/shared
   branch: main
 
 jobs:
