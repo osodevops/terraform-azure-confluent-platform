@@ -1,5 +1,5 @@
 module connect {
-  source = "../../modules/confluent_node"
+  source = "../../../modules/confluent_node"
   application = "connect"
   user_data_template = "default"
   admin_username = "osoadmin"

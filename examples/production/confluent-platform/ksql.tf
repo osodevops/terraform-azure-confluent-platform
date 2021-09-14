@@ -1,5 +1,5 @@
 module ksql {
-  source = "../../modules/confluent_node"
+  source = "../../../modules/confluent_node"
   application = "ksql"
   user_data_template = "default"
   admin_username = "osoadmin"
