@@ -1,8 +1,13 @@
-.idea
-.terragrunt-cache
+# Compiled files
+*.tfstate
+*.tfstate.backup
+
+# Module directory
 .terraform
-*.lock.hcl
-*.pem
-terraform.tfstate
-oso-confluent-ssh
-oso-confluent-ssh.pub
+.idea
+*.iml
+
+.build-harness
+build-harness
+
+test.log
