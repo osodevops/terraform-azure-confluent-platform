@@ -1,6 +1,16 @@
-.idea
-.terragrunt-cache
+# Compiled files
+*.tfstate
+*.tfstate.backup
+
+# Module directory
 .terraform
+.idea
+*.iml
+
+.build-harness
+build-harness
+
+.terragrunt-cache
 *.lock.hcl
 *.pem
 terraform.tfstate
