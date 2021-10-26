@@ -10,4 +10,9 @@
 .build-harness
 build-harness
 
-test.log
+.terragrunt-cache
+*.lock.hcl
+*.pem
+terraform.tfstate
+oso-confluent-ssh
+oso-confluent-ssh.pub
