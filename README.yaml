@@ -65,10 +65,10 @@ examples: |-
     - [x] Public IPs for Control Center and Rest Proxy.
   ```
   #### Shared Resource Deployments
-  To deploy from local, navigate to `./examples/shared`, and run `terraform init && terraform plan`.  If you are happy with the output, you can run `terraform apply`
+  To deploy from local, navigate to `./examples/production/shared`, and run `terraform init -backend-config=backend.hcl && terraform plan`.  If you are happy with the output, you can run `terraform apply`
 
   #### Confluent deployment
-  After the shared resource groups have successfully deployed, you can deploy the confluent VMs.  To do so, navigate to `./examples/production`, and run `terraform init && terraform plan`.  If you are happy with the output, you can run `terraform apply`
+  After the shared resource groups have successfully deployed, you can deploy the confluent VMs.  To do so, navigate to `./examples/production/confluent-platform`, and run `terraform init -backend-config=backend.hcl && terraform plan`.  If you are happy with the output, you can run `terraform apply`
 
   ### Ansible Deployment
   #### Command Line
@@ -115,8 +115,6 @@ examples: |-
   ### Considerations
   ##### Cluster customisations
   **NOTE**
-  Sadly there is an [open bug in the azurerm provider](https://github.com/terraform-providers/terraform-provider-azurerm/issues/10888) which is preventing changes to the ansible-inventory.yml from being realised and uploaded (it should be performing an md5 verification on the file).  Until this bug has been solved, you will need to manually update the ansible-inventory.yml file either via CLI, or via the web console.  Once fixed, this will be the process:
-
   All properties/configurations/hostnames for the cluster are stored in the file `./modules/resource_group/ansible-inventory.yml`.  To activate changes made to that file, perform the following operations:
   * Change `./modules/resource_group/ansible-inventory.yml` as desired
   * Deploy inventory into the Azure storage account by navigating to `./production/resource_group`, and running `terragrunt apply`
