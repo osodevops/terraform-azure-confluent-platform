@@ -172,7 +172,7 @@ File a GitHub [issue](https://github.com/osodevops/terraform-azure-confluent-pla
 
 ## The legals
 
-Copyright © 2017-2021 [OSO](https://oso.sh) | See [LICENCE](LICENSE) for full details.
+Copyright © 2017-2022 [OSO](https://oso.sh) | See [LICENCE](LICENSE) for full details.
 
 [<img src="https://oso-public-resources.s3.eu-west-1.amazonaws.com/oso-logo-green.png" alt="OSO who we are" width="250"/>](https://oso.sh/who-we-are/)
 
