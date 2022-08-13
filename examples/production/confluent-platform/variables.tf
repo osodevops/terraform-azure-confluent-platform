@@ -4,7 +4,7 @@ variable prefix {
 }
 variable environment {
   description = "The environment for deployment"
-  default = "sandbox"
+  default = "production"
 }
 variable azure_location {
   description = "The Azure region for deployment"

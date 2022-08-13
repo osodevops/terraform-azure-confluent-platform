@@ -1,6 +1,6 @@
 #!/bin/bash
 
-RESOURCE_GROUP_NAME=terraform-state
+RESOURCE_GROUP_NAME=terraform-tfstate
 STORAGE_ACCOUNT_NAME=confluentstate
 CONTAINER_NAME=tfstate
 LOCATION=uksouth

@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source = "hashicorp/azurerm"
-      version = "~> 2.77.0"
+      version = "=3.0.0"
     }
   }
 
@@ -16,7 +16,7 @@ data terraform_remote_state shared {
   config = {
     container_name       = "tfstate"
     key                  = "prod/shared.terraform.tfstate"
-    resource_group_name  = "terraform-state"
+    resource_group_name  = "terraform-tfstate"
     storage_account_name = "confluentstate"
   }
 }

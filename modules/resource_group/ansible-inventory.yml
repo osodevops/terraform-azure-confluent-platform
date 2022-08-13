@@ -9,7 +9,7 @@ all:
     ansible_become: true
 
     health_checks_enabled: false
-    sasl_protocol: plain
+    sasl_protocol: none
     ssl_enabled: false
     ssl_mutual_auth_enabled: false
     rbac_enabled: false
@@ -40,15 +40,9 @@ all:
     confluent:
       support:
         metrics_enabled: false
-    zookeeper:
-      properties:
-        4lw.commands.whitelist: stat, ruok, conf, isro, cons, dump, crst, envi, srst, srvr, wchc, wchp, mntr
 
 # Node configuration
 kafka_broker:
-  vars:
-    kafka_broker_custom_properties:
-      ldap.java.naming.factory.initial: com.sun.jndi.ldap.LdapCtxFactory
   hosts:
     broker-1.confluent.internal:
 zookeeper:

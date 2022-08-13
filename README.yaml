@@ -69,7 +69,12 @@ examples: |-
 
   #### Confluent deployment
   After the shared resource groups have successfully deployed, you can deploy the confluent VMs.  To do so, navigate to `./examples/production/confluent-platform`, and run `terraform init -backend-config=backend.hcl && terraform plan`.  If you are happy with the output, you can run `terraform apply`
-
+  
+  ##### Platform configuration
+  All properties/configurations/hostnames for the cluster are stored in the file `./modules/resource_group/ansible-inventory.yml`.  To activate changes made to that file, perform the following operations:
+  * Change `./modules/resource_group/ansible-inventory.yml` as desired
+  * Deploy inventory into the Azure storage account by navigating to `./production/resource_group`, and running `terraform apply`
+  
   ### Ansible Deployment
   #### Command Line
   The terraform deployment deploys an Azure container group into a private subnet which has the ability to provision the newly created VMs with [cp-ansible](https://github.com/confluentinc/cp-ansible).  If you have made any alterations -- prefix, environment, additional instances, etc., you will need to update `./resource_group/ansible-inventory.yml` to reflect this.  Presently the inventory is working on the assumption of a single instance, so should, for example you wish to have 3 zookeeper instances, you would need to add `zookeeper-2.confluent.internal:` and `zookeeper-3.confluent.internal:` to this file otherwise cp-ansible will not attempt to provision these VMs
@@ -81,47 +86,56 @@ examples: |-
 
   This process should take approximately 25 mins to complete. The complete process will output:
   ```shell
-    Thursday 15 July 2021  10:54:10 +0000 (0:00:00.045)       0:19:24.310 *********
+    Saturday 13 August 2022  07:39:24 +0000 (0:00:00.609)       0:14:48.993 *******
     ===============================================================================
-    confluent.common : Install Java --------------------------------------- 178.52s
-    confluent.ksql : Install the KSQL Packages ---------------------------- 173.26s
-    confluent.kafka_rest : Install the Kafka Rest Packages ---------------- 153.52s
-    confluent.control_center : Install the Control Center Packages -------- 147.18s
-    confluent.schema_registry : Install the Schema Registry Packages ------ 116.37s
-    confluent.kafka_broker : Install the Kafka Broker Packages ------------ 109.67s
-    confluent.zookeeper : Install the Zookeeper Packages ------------------- 66.41s
-    confluent.control_center : Startup Delay ------------------------------- 30.26s
-    confluent.kafka_broker : Startup Delay --------------------------------- 20.23s
-    confluent.kafka_rest : Startup Delay ----------------------------------- 20.22s
-    confluent.schema_registry : Startup Delay ------------------------------ 20.21s
-    confluent.ksql : Startup Delay ----------------------------------------- 20.21s
-    confluent.common : Gather OS Facts -------------------------------------- 7.37s
-    confluent.zookeeper : Startup Delay ------------------------------------- 5.93s
-    confluent.common : Add Max Size Properties ------------------------------ 4.90s
-    confluent.common : yum-clean-all ---------------------------------------- 4.42s
-    confluent.common : Install OpenSSL and Unzip ---------------------------- 2.69s
-    confluent.common : Add Confluent Dist Yum Repo -------------------------- 2.40s
-    confluent.kafka_broker : Create Kafka Broker Config --------------------- 2.11s
-    confluent.zookeeper : Create Zookeeper myid File ------------------------ 1.92s
+    confluent.platform.control_center : Install the Control Center Packages - 131.84s
+    confluent.platform.kafka_rest : Install the Kafka Rest Packages ------- 131.42s
+    confluent.platform.schema_registry : Install the Schema Registry Packages -- 84.57s
+    confluent.platform.kafka_broker : Install the Kafka Broker Packages ---- 79.60s
+    confluent.platform.common : Install Java ------------------------------- 71.13s
+    confluent.platform.zookeeper : Install the Zookeeper Packages ---------- 32.61s
+    confluent.platform.control_center : Startup Delay ---------------------- 30.50s
+    confluent.platform.kafka_broker : Startup Delay ------------------------ 20.42s
+    confluent.platform.schema_registry : Startup Delay --------------------- 15.41s
+    confluent.platform.kafka_rest : Startup Delay -------------------------- 15.41s
+    confluent.platform.common : Add Max Size Properties --------------------- 8.08s
+    confluent.platform.kafka_broker : Create Kafka Broker Config ------------ 6.91s
+    confluent.platform.zookeeper : Startup Delay ---------------------------- 5.93s
+    confluent.platform.kafka_broker : Set Permissions on Data Dir files ----- 5.30s
+    confluent.platform.kafka_broker : Set Permissions on Data Dirs ---------- 5.21s
+    confluent.platform.common : Gather OS Facts ----------------------------- 5.21s
+    confluent.platform.control_center : Create Control Center Config -------- 4.41s
+    confluent.platform.common : yum-clean-all ------------------------------- 4.32s
+    confluent.platform.kafka_rest : Create Kafka Rest Config ---------------- 4.32s
+    confluent.platform.common : Add Confluent Repo file --------------------- 4.17s
   ```
-
 
   #### Azure Console (alternative deployment method)
   Alternatively, aia the Azure Console, simply find the container group named **oso-devops-cp-ansible** in the click the 'Start' button:
 
   ![container](./azure_container.png)
-
-
-  ### Considerations
-  ##### Cluster customisations
-  **NOTE**
-  All properties/configurations/hostnames for the cluster are stored in the file `./modules/resource_group/ansible-inventory.yml`.  To activate changes made to that file, perform the following operations:
-  * Change `./modules/resource_group/ansible-inventory.yml` as desired
-  * Deploy inventory into the Azure storage account by navigating to `./production/resource_group`, and running `terragrunt apply`
-  * Run `./run-ansible.sh`
-
-
-
+  
+  ### Testing the deployment
+  Once the Ansible installer has completed you can test deployment in the following ways:
+  
+  #### Control Centre
+  Access the Control Centre using the public ip: Print the IP using `terraform output -raw control_center_ip` open your browser and goto: `http://<<control_center_ip>>:9021` NOTE: If you have enabled SSL, using `https`
+  
+  #### Rest Proxy
+  Using the publicly accessible Rest Proxy we can post a test message which will in turn create a topic and produce a message using the following command: 
+  ```shell
+    # Produce a message using binary embedded data with value "Kafka" to the topic binarytest
+    curl -X POST -H "Content-Type: application/vnd.kafka.binary.v2+json" \
+      -H "Accept: application/vnd.kafka.v2+json" \
+      --data '{"records":[{"value":"S2Fma2E="}]}' "http://<<rest-proxy-ip>>:8082/topics/binarytest"
+  
+    # Expected output from preceding command:
+    {"offsets":[{"partition":0,"offset":0,"error_code":null,"error":null}],"key_schema_id":null,"value_schema_id":null}
+  ```
+  
+  #### SSH Connectivity to check the logs
+  All VM's have been created using the SSH generated at the beginning, you can now use the [Azure Bastion Service](https://azure.microsoft.com/en-us/services/azure-bastion/#overview) with the .pem file located in `./modules/resource_group/<<key_name>>.pem` 
+  
   ##### Debugging Ansible
   As ansible is run from a container within the Azure network, we need away to debug when things aren't working as expected.  To provide this ability, we simply need to uncomment out the `commands = ["sleep", "100000"]` on `resource "azurerm_container_group" "ansible"` found at .`/modules/resource_group/ansible-container.tf` (and then deploy these changes).  Once this is done, you will be able to exec onto this container from the Azure Console, and run ansible manually, or tweak configuration/code in-place.
 
