@@ -15,7 +15,7 @@ variable public_subnet_name {
 }
 variable cp_ansible_version {
   description = "The version of cp-ansible to deploy"
-  default = "6.1.1-post"
+  default = "7.2.1-post"
 }
 locals {
   uid = "${var.prefix}-${var.environment}"
