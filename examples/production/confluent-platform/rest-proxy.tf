@@ -3,7 +3,7 @@ module rest_proxy {
   application = "rest-proxy"
   user_data_template = "default"
   admin_username = "osoadmin"
-  cluster_instance_count = 1
+  cluster_instance_count = var.rest_proxy_instance_count
   data_disk_size = 0
   environment = "production"
   dns_zone = var.dns_zone

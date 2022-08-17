@@ -3,7 +3,7 @@ module schema_registry {
   application = "schema-registry"
   user_data_template = "default"
   admin_username = "osoadmin"
-  cluster_instance_count = 1
+  cluster_instance_count = var.schema_registry_instance_count
   data_disk_size = 0
   environment = "production"
   dns_zone = var.dns_zone
