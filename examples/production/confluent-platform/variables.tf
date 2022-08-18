@@ -22,6 +22,10 @@ variable public_subnet_name {
   description = "The public subnet name"
   default = "confluent-public"
 }
+variable vm_admin_password {
+  description = "The admin password for the VM"
+  default = "osoadmin"
+}
 
 # Zookeeper
 variable "zookeeper_instance_count" {

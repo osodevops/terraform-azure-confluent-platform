@@ -2,7 +2,7 @@ module broker {
   source = "../../../modules/confluent_node"
   application = "broker"
   user_data_template = "broker"
-  admin_username = "osoadmin"
+  admin_username = var.vm_admin_password
   cluster_instance_count = var.broker_instance_count
   data_disk_size = var.broker_data_disk_size
   environment = "production"

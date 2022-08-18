@@ -2,7 +2,7 @@ module ksql {
   source = "../../../modules/confluent_node"
   application = "ksql"
   user_data_template = "default"
-  admin_username = "osoadmin"
+  admin_username = var.vm_admin_password
   cluster_instance_count = var.ksql_instance_count
   data_disk_size = 0
   environment = "production"

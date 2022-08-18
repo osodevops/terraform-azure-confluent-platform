@@ -2,7 +2,7 @@ module connect {
   source = "../../../modules/confluent_node"
   application = "connect"
   user_data_template = "default"
-  admin_username = "osoadmin"
+  admin_username = var.vm_admin_password
   cluster_instance_count = var.connect_instance_count
   data_disk_size = 0
   environment = "production"

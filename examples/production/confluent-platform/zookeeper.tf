@@ -3,7 +3,7 @@ module zookeeper {
   source = "../../../modules/confluent_node"
   application = "zookeeper"
   user_data_template = "default"
-  admin_username = "osoadmin"
+  admin_username = var.vm_admin_password
   cluster_instance_count = var.zookeeper_instance_count
   data_disk_size = var.zookeeper_data_disk_size
   environment = "production"
