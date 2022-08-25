@@ -1,10 +1,11 @@
+
 module zookeeper {
   source = "../../../modules/confluent_node"
   application = "zookeeper"
   user_data_template = "default"
   admin_username = "osoadmin"
-  cluster_instance_count = 1
-  data_disk_size = 2048
+  cluster_instance_count = var.zookeeper_instance_count
+  data_disk_size = var.zookeeper_data_disk_size
   environment = "production"
   dns_zone = var.dns_zone
   azure_resource_group_name = data.terraform_remote_state.shared.outputs.resource_group_name

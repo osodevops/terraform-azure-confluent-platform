@@ -23,6 +23,56 @@ variable public_subnet_name {
   default = "confluent-public"
 }
 
+# Zookeeper
+variable "zookeeper_instance_count" {
+  description = "Number of instances of Zookeeper"
+}
+
+variable "zookeeper_data_disk_size" {
+  description = "Size in GB of data disk"
+  default = "2048"
+}
+
+# Kafka broker
+variable "broker_instance_count" {
+  description = "Number of instances of Kafka brokers"
+}
+
+variable "broker_data_disk_size" {
+  description = "Size in GB of data disk"
+  default = "2048"
+}
+
+# Schema Registry
+variable "schema_registry_instance_count" {
+  description = "Number of instances of Schema Registry"
+}
+
+# Control Center
+variable "control_center_instance_count" {
+  description = "Control center can only be deployed once"
+  default = 1
+}
+
+# Kafka Connect
+variable "connect_instance_count" {
+  description = "Number of instances of Kafka Connect"
+  default = 0
+}
+
+# Rest Proxy
+variable "rest_proxy_instance_count" {
+  description = "Number of instances of Kafka Rest Proxy"
+  default = 0
+}
+
+# KSQL
+variable "ksql_instance_count" {
+  description = "Number of instances of KSQL DB"
+  default = 0
+}
+
+
 locals {
   common_tags = {
     "Application" = "confluent"
