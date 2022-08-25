@@ -45,9 +45,13 @@ all:
 kafka_broker:
   hosts:
     broker-1.confluent.internal:
+    broker-2.confluent.internal:
+    broker-3.confluent.internal:
 zookeeper:
   hosts:
     zookeeper-1.confluent.internal:
+    zookeeper-2.confluent.internal:
+    zookeeper-3.confluent.internal:
 schema_registry:
   hosts:
     schema-registry-1.confluent.internal:
