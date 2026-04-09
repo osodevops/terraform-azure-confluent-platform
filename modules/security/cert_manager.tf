@@ -8,15 +8,16 @@ resource "helm_release" "cert_manager" {
   repository       = "https://charts.jetstack.io"
   chart            = "cert-manager"
 
-  set {
-    name  = "installCRDs"
-    value = "true"
-  }
-
-  set {
-    name  = "replicaCount"
-    value = "2"
-  }
+  set = [
+    {
+      name  = "installCRDs"
+      value = "true"
+    },
+    {
+      name  = "replicaCount"
+      value = "2"
+    }
+  ]
 }
 
 # -----------------------------------------------------------------------------

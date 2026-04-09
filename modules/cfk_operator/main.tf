@@ -8,28 +8,26 @@ resource "helm_release" "confluent_operator" {
   wait             = true
   timeout          = 600
 
-  set {
-    name  = "namespaced"
-    value = var.namespaced
-  }
-
-  set {
-    name  = "resources.requests.cpu"
-    value = var.resource_requests.cpu
-  }
-
-  set {
-    name  = "resources.requests.memory"
-    value = var.resource_requests.memory
-  }
-
-  set {
-    name  = "resources.limits.cpu"
-    value = var.resource_limits.cpu
-  }
-
-  set {
-    name  = "resources.limits.memory"
-    value = var.resource_limits.memory
-  }
+  set = [
+    {
+      name  = "namespaced"
+      value = tostring(var.namespaced)
+    },
+    {
+      name  = "resources.requests.cpu"
+      value = var.resource_requests.cpu
+    },
+    {
+      name  = "resources.requests.memory"
+      value = var.resource_requests.memory
+    },
+    {
+      name  = "resources.limits.cpu"
+      value = var.resource_limits.cpu
+    },
+    {
+      name  = "resources.limits.memory"
+      value = var.resource_limits.memory
+    }
+  ]
 }

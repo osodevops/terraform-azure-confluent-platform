@@ -1,10 +1,10 @@
 # -----------------------------------------------------------------------------
 # Default deny all ingress in the Confluent namespace
 # -----------------------------------------------------------------------------
-resource "kubernetes_network_policy" "default_deny" {
+resource "kubernetes_network_policy_v1" "default_deny" {
   metadata {
     name      = "default-deny-ingress"
-    namespace = kubernetes_namespace.confluent.metadata[0].name
+    namespace = kubernetes_namespace_v1.confluent.metadata[0].name
   }
 
   spec {
@@ -17,10 +17,10 @@ resource "kubernetes_network_policy" "default_deny" {
 # -----------------------------------------------------------------------------
 # Allow all traffic between pods within the Confluent namespace
 # -----------------------------------------------------------------------------
-resource "kubernetes_network_policy" "allow_confluent_internal" {
+resource "kubernetes_network_policy_v1" "allow_confluent_internal" {
   metadata {
     name      = "allow-confluent-internal"
-    namespace = kubernetes_namespace.confluent.metadata[0].name
+    namespace = kubernetes_namespace_v1.confluent.metadata[0].name
   }
 
   spec {
@@ -30,7 +30,7 @@ resource "kubernetes_network_policy" "allow_confluent_internal" {
       from {
         namespace_selector {
           match_labels = {
-            "kubernetes.io/metadata.name" = kubernetes_namespace.confluent.metadata[0].name
+            "kubernetes.io/metadata.name" = kubernetes_namespace_v1.confluent.metadata[0].name
           }
         }
       }

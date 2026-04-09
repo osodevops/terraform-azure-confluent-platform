@@ -1,4 +1,4 @@
-resource "kubernetes_config_map" "kafka_grafana_dashboard" {
+resource "kubernetes_config_map_v1" "kafka_grafana_dashboard" {
   metadata {
     name      = "kafka-grafana-dashboard"
     namespace = var.prometheus_namespace

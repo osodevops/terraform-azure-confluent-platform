@@ -10,12 +10,12 @@ output "key_vault_uri" {
 
 output "confluent_namespace" {
   description = "The name of the Kubernetes namespace for Confluent Platform."
-  value       = kubernetes_namespace.confluent.metadata[0].name
+  value       = kubernetes_namespace_v1.confluent.metadata[0].name
 }
 
 output "mds_token_secret_name" {
   description = "The name of the Kubernetes secret containing MDS token keys, or null if RBAC is disabled."
-  value       = var.rbac_enabled ? kubernetes_secret.mds_token[0].metadata[0].name : null
+  value       = var.rbac_enabled ? kubernetes_secret_v1.mds_token[0].metadata[0].name : null
 }
 
 output "cert_manager_identity_client_id" {

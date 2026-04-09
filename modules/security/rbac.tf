@@ -10,12 +10,12 @@ resource "tls_private_key" "mds" {
 # -----------------------------------------------------------------------------
 # MDS token secret – contains the public key and the full key pair
 # -----------------------------------------------------------------------------
-resource "kubernetes_secret" "mds_token" {
+resource "kubernetes_secret_v1" "mds_token" {
   count = var.rbac_enabled ? 1 : 0
 
   metadata {
     name      = "${var.name_prefix}-mds-token"
-    namespace = kubernetes_namespace.confluent.metadata[0].name
+    namespace = kubernetes_namespace_v1.confluent.metadata[0].name
   }
 
   type = "Opaque"
@@ -29,12 +29,12 @@ resource "kubernetes_secret" "mds_token" {
 # -----------------------------------------------------------------------------
 # MDS client credentials – per-component bearer tokens
 # -----------------------------------------------------------------------------
-resource "kubernetes_secret" "mds_client_kafka" {
+resource "kubernetes_secret_v1" "mds_client_kafka" {
   count = var.rbac_enabled ? 1 : 0
 
   metadata {
     name      = "${var.name_prefix}-mds-client-kafka"
-    namespace = kubernetes_namespace.confluent.metadata[0].name
+    namespace = kubernetes_namespace_v1.confluent.metadata[0].name
   }
 
   type = "Opaque"
@@ -44,12 +44,12 @@ resource "kubernetes_secret" "mds_client_kafka" {
   }
 }
 
-resource "kubernetes_secret" "mds_client_sr" {
+resource "kubernetes_secret_v1" "mds_client_sr" {
   count = var.rbac_enabled ? 1 : 0
 
   metadata {
     name      = "${var.name_prefix}-mds-client-sr"
-    namespace = kubernetes_namespace.confluent.metadata[0].name
+    namespace = kubernetes_namespace_v1.confluent.metadata[0].name
   }
 
   type = "Opaque"
@@ -59,12 +59,12 @@ resource "kubernetes_secret" "mds_client_sr" {
   }
 }
 
-resource "kubernetes_secret" "mds_client_connect" {
+resource "kubernetes_secret_v1" "mds_client_connect" {
   count = var.rbac_enabled ? 1 : 0
 
   metadata {
     name      = "${var.name_prefix}-mds-client-connect"
-    namespace = kubernetes_namespace.confluent.metadata[0].name
+    namespace = kubernetes_namespace_v1.confluent.metadata[0].name
   }
 
   type = "Opaque"
@@ -74,12 +74,12 @@ resource "kubernetes_secret" "mds_client_connect" {
   }
 }
 
-resource "kubernetes_secret" "mds_client_ksqldb" {
+resource "kubernetes_secret_v1" "mds_client_ksqldb" {
   count = var.rbac_enabled ? 1 : 0
 
   metadata {
     name      = "${var.name_prefix}-mds-client-ksqldb"
-    namespace = kubernetes_namespace.confluent.metadata[0].name
+    namespace = kubernetes_namespace_v1.confluent.metadata[0].name
   }
 
   type = "Opaque"
@@ -89,12 +89,12 @@ resource "kubernetes_secret" "mds_client_ksqldb" {
   }
 }
 
-resource "kubernetes_secret" "mds_client_c3" {
+resource "kubernetes_secret_v1" "mds_client_c3" {
   count = var.rbac_enabled ? 1 : 0
 
   metadata {
     name      = "${var.name_prefix}-mds-client-c3"
-    namespace = kubernetes_namespace.confluent.metadata[0].name
+    namespace = kubernetes_namespace_v1.confluent.metadata[0].name
   }
 
   type = "Opaque"
@@ -104,12 +104,12 @@ resource "kubernetes_secret" "mds_client_c3" {
   }
 }
 
-resource "kubernetes_secret" "mds_client_krp" {
+resource "kubernetes_secret_v1" "mds_client_krp" {
   count = var.rbac_enabled ? 1 : 0
 
   metadata {
     name      = "${var.name_prefix}-mds-client-krp"
-    namespace = kubernetes_namespace.confluent.metadata[0].name
+    namespace = kubernetes_namespace_v1.confluent.metadata[0].name
   }
 
   type = "Opaque"
@@ -122,12 +122,12 @@ resource "kubernetes_secret" "mds_client_krp" {
 # -----------------------------------------------------------------------------
 # REST credential secret – used for REST-based authentication
 # -----------------------------------------------------------------------------
-resource "kubernetes_secret" "rest_credential" {
+resource "kubernetes_secret_v1" "rest_credential" {
   count = var.rbac_enabled ? 1 : 0
 
   metadata {
     name      = "${var.name_prefix}-rest-credential"
-    namespace = kubernetes_namespace.confluent.metadata[0].name
+    namespace = kubernetes_namespace_v1.confluent.metadata[0].name
   }
 
   type = "Opaque"

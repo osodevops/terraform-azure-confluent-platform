@@ -3,7 +3,7 @@ data "azurerm_client_config" "current" {}
 # -----------------------------------------------------------------------------
 # Confluent Platform namespace
 # -----------------------------------------------------------------------------
-resource "kubernetes_namespace" "confluent" {
+resource "kubernetes_namespace_v1" "confluent" {
   metadata {
     name = var.confluent_namespace
 
@@ -23,7 +23,7 @@ resource "azurerm_key_vault" "main" {
   resource_group_name        = var.resource_group_name
   tenant_id                  = data.azurerm_client_config.current.tenant_id
   sku_name                   = "standard"
-  enable_rbac_authorization  = true
+  rbac_authorization_enabled = true
   purge_protection_enabled   = true
   soft_delete_retention_days = 7
 
