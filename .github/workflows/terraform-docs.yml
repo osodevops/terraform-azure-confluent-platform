@@ -1,0 +1,32 @@
+name: Generate Docs
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.tf'
+      - '.terraform-docs.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  docs:
+    name: Update Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+
+      - name: Generate terraform-docs
+        uses: terraform-docs/gh-actions@aeae0038ed47a547e0c0571c32f40571b42e2547 # v1.3.0
+        with:
+          working-dir: .
+          config-file: .terraform-docs.yml
+          output-file: README.md
+          output-method: inject
+          git-push: "true"
+          git-commit-message: "docs: auto-generate terraform-docs"

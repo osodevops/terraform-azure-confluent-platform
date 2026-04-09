@@ -53,23 +53,3 @@ See [examples/](examples/) for more usage patterns.
 
 This is v2 of the module - a complete rewrite from VM-based (Ansible) to AKS + CFK.
 See [Migration Guide](docs/MIGRATION.md) for upgrading from v1.
-
-<!-- BEGIN_TF_DOCS -->
-<!-- END_TF_DOCS -->
-
-## Examples
-
-| Example | Description |
-|---------|-------------|
-| [complete](examples/complete/) | Full HA production deployment with all components, TLS, RBAC, and monitoring |
-| [minimal](examples/minimal/) | Minimal Kafka + Schema Registry for dev/test |
-| [bring-your-own-aks](examples/bring-your-own-aks/) | Deploy CFK on an existing VNet/AKS cluster |
-
-## Related Projects
-
-- [Confluent for Kubernetes Documentation](https://docs.confluent.io/operator/current/overview.html)
-- [terraform-aws-confluent-platform](https://github.com/osodevops/terraform-aws-confluent-platform) - AWS equivalent
-
-## License
-
-Apache 2.0 Licensed. See [LICENSE](LICENSE) for full details.

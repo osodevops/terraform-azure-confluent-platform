@@ -1,0 +1,4 @@
+# Copy this file to terraform.tfvars and customize
+# name        = "my-confluent"
+# environment = "production"
+# location    = "uksouth"

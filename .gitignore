@@ -1,18 +1,36 @@
-# Compiled files
+# Terraform
+.terraform/
 *.tfstate
-*.tfstate.backup
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+!*.tfvars.example
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
 
-# Module directory
-.terraform
-.idea
+# IDE
+.idea/
 *.iml
+.vscode/
+*.swp
+*.swo
 
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts (v1 legacy)
 .build-harness
 build-harness
-
 .terragrunt-cache
-*.lock.hcl
+
+# Secrets
 *.pem
-terraform.tfstate
+*.key
 oso-confluent-ssh
 oso-confluent-ssh.pub
